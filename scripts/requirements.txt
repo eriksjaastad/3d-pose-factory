@@ -1,0 +1,12 @@
+# Python dependencies for 3D Pose Factory local scripts
+# Install with: pip install -r requirements.txt
+
+# For future sync script enhancements
+boto3>=1.34.0  # AWS S3/R2 API access (alternative to rclone)
+
+# For image processing and validation
+Pillow>=10.0.0
+
+# For configuration management
+PyYAML>=6.0
+

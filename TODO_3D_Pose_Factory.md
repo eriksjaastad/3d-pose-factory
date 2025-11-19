@@ -23,19 +23,23 @@
   - [ ] Run test: download sample from R2 → local `data/raw/pose-factory`
 
 - **Local laptop integration**
-  - [ ] Create `scripts/`, `data/`, and `config/` folders locally as per `Local_Integration_Design.md`
-  - [ ] Set up a Python virtualenv under `scripts/`
-  - [ ] Add a `pose_sync.py` stub script for R2 ↔ local sync
+  - [x] Create `scripts/` and `data/` folders locally as per `Local_Integration_Design.md`
+  - [x] Create `config/` folder locally and add example config file
+  - [x] Set up a Python virtualenv under `scripts/`
+  - [x] Add a `pose_sync.py` stub script for R2 ↔ local sync
+  - [x] Create `requirements.txt` for local Python dependencies
 
 - **Pose generation + validation**
   - [x] Install and test MediaPipe pose extraction in pod
-  - [x] Add a small reusable pose test script in the pod workspace
-  - [ ] Decide where 3D→2D outputs will be written on the pod (e.g., `/workspace/3d_pose_factory/output/`)
+  - [x] Add a small reusable pose test script in the pod workspace (`pose_test.py` uploaded)
+  - [x] Decide where 3D→2D outputs will be written on the pod (e.g., `/workspace/pose-factory/output/`)
+  - [ ] Test pose detection on sample image to verify full pipeline works
+  - [ ] Set up reliable file transfer method (direct SSH pipe doesn't work with RunPod)
 
 - **Git / GitHub integration**
-  - [ ] Initialize git repo locally for 3D Pose Factory
-  - [ ] Add a `.gitignore` (exclude `data/`, virtualenvs, and any secrets)
-  - [ ] Create GitHub repo and push initial commit
-  - [ ] Verify RunPod pod can `git clone` the repo
+  - [x] Initialize git repo locally for 3D Pose Factory
+  - [x] Add a `.gitignore` (exclude `data/`, virtualenvs, and any secrets)
+  - [x] Create GitHub repo and push initial commit (https://github.com/eriksjaastad/3d-pose-factory.git)
+  - [x] Verify RunPod pod can `git clone` the repo
 
 

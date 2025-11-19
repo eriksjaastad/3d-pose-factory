@@ -1,0 +1,28 @@
+# 3D Pose Factory – Base Configuration
+
+paths:
+  local_raw: "./data/raw"
+  local_processed: "./data/processed"
+  local_poses: "./data/poses"
+  local_sync: "./data/sync"
+  pod_workspace: "/workspace/pose-factory"
+  pod_output: "/workspace/pose-factory/output"
+
+r2:
+  bucket: "pose-factory"
+  remote_name: "r2_pose_factory"
+  use_r2: false   # set to true after R2 is configured
+
+pose_settings:
+  image_size: [1080, 1920]
+  skeleton_format: "mediapipe_33"
+  save_debug_images: true
+  save_json: true
+  save_numpy: false
+
+blender:
+  version: "4.0.2"
+  headless: true
+  output_frames: "/workspace/pose-factory/output/frames"
+
+
