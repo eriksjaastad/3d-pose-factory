@@ -1,10 +1,14 @@
 ## 3D Pose Factory – Project TODOs
 
-- **Cloudflare R2 setup**
-  - [ ] Create Cloudflare account (if not already created)
-  - [ ] Create R2 bucket for 3D Pose Factory outputs (e.g., `pose-factory`)
-  - [ ] Generate R2 Access Key + Secret Key
-  - [ ] Decide where to store these locally (env vars / `.env` file, not in git)
+- **Cloudflare R2 setup** (R2 is Cloudflare's S3-compatible storage service)
+  - [ ] Go to https://dash.cloudflare.com and sign up/login
+  - [ ] Navigate to R2 Object Storage in the left sidebar
+  - [ ] Click "Create bucket" → name it `pose-factory`
+  - [ ] Go to "Manage R2 API Tokens" → "Create API token"
+  - [ ] Select "Edit" permissions, apply to `pose-factory` bucket
+  - [ ] Save the Access Key ID and Secret Access Key (shown once!)
+  - [ ] Note your Account ID (shown in R2 dashboard)
+  - [ ] Store credentials in `~/.config/rclone/rclone.conf` (not in git!)
 
 - **RunPod pod configuration**
   - [x] SSH access to pod using dedicated `id_ed25519_runpod` key
@@ -15,12 +19,20 @@
   - [x] Install Python pose tools (`numpy`, `pillow`, `opencv-python`, `mediapipe`)
   - [x] Install `rclone`
 
-- **Cloudflare R2 integration**
-  - [ ] Configure `rclone` on RunPod to talk to the R2 bucket
-  - [ ] Configure `rclone` on local Mac to talk to the same R2 bucket
-  - [ ] Decide on standard remote name (e.g., `r2_pose_factory`)
-  - [ ] Run test: upload small sample from RunPod → R2
-  - [ ] Run test: download sample from R2 → local `data/raw/pose-factory`
+- **Cloudflare R2 integration** (rclone is the tool that connects to R2)
+  - [ ] **On local Mac:** Install rclone: `brew install rclone`
+  - [ ] **On local Mac:** Run `rclone config` and configure R2:
+    - Choose "n" for new remote, name it `r2_pose_factory`
+    - Choose "s3" (R2 is S3-compatible)
+    - Choose "Cloudflare R2" provider
+    - Enter Access Key ID and Secret Access Key from above
+    - Endpoint: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
+    - Leave region blank, set ACL to "private"
+  - [ ] **On local Mac:** Test upload: `rclone copy config/config.yaml r2_pose_factory:pose-factory/test/`
+  - [ ] **On local Mac:** Test download: `rclone ls r2_pose_factory:pose-factory/test/`
+  - [ ] **On RunPod:** Run same `rclone config` setup (rclone already installed)
+  - [ ] **On RunPod:** Test download from R2 to verify connection works
+  - [ ] Create directory structure in R2 bucket: `input/`, `output/`, `test/`
 
 - **Local laptop integration**
   - [x] Create `scripts/` and `data/` folders locally as per `Local_Integration_Design.md`
