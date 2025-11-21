@@ -12,6 +12,10 @@ scripts/venv/
 data/
 *.log
 
+# Secrets
+.r2_credentials
+.env
+
 # OS/editor
 .DS_Store
 .vscode/
