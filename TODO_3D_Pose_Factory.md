@@ -22,7 +22,7 @@
   - [x] Test pose detection (yoga_warrior.jpg - successful)
   - [x] Full workflow tested: Mac → R2 → Pod → Process → R2 → Mac
   - [x] **Create pod setup script** - setup_pod.sh for fast fresh pod initialization (2-3 mins)
-  - [ ] **Document pod configuration** - GPU type (A40), template, container image for reference
+  - [x] **Document pod configuration** - Created RUNPOD_CONFIG.md with template, GPU, settings
   - [x] **Decision: Skip network volumes** - Not worth the cost, fresh pods + setup script is easier
 
 - **Cloudflare R2 integration** (rclone is the tool that connects to R2)
