@@ -21,11 +21,9 @@
   - [x] Test Blender rendering (cube render successful)
   - [x] Test pose detection (yoga_warrior.jpg - successful)
   - [x] Full workflow tested: Mac → R2 → Pod → Process → R2 → Mac
-  - [ ] **Save pod configuration** - Document exact GPU type, template, settings for easy redeployment
-  - [ ] **Set up network volumes** - Use persistent network storage instead of local pod storage
-    - [ ] Create network volume in RunPod dashboard
-    - [ ] Attach network volume to pod at `/workspace`
-    - [ ] This prevents "zero GPU" issues when stopping/restarting pods
+  - [x] **Create pod setup script** - setup_pod.sh for fast fresh pod initialization (2-3 mins)
+  - [ ] **Document pod configuration** - GPU type (A40), template, container image for reference
+  - [x] **Decision: Skip network volumes** - Not worth the cost, fresh pods + setup script is easier
 
 - **Cloudflare R2 integration** (rclone is the tool that connects to R2)
   - [x] **On local Mac:** rclone already installed via Homebrew
@@ -36,7 +34,7 @@
   - [x] **On RunPod:** Test upload successful: `pose_test.py` → R2
   - [x] **On RunPod:** Test download successful: read files from R2
   - [x] Full bidirectional sync working: Mac ↔ R2 ↔ RunPod
-  - [ ] Create directory structure in R2 bucket: `input/`, `output/` (test/ already exists)
+  - [x] Directory structure in R2 bucket: `input/`, `output/`, `test/`, `scripts/` (auto-created)
 
 - **Local laptop integration**
   - [x] Create `scripts/` and `data/` folders locally as per `Local_Integration_Design.md`
@@ -72,11 +70,16 @@
     - [x] ENTIRE PIPELINE WORKING END-TO-END!
   
 - **Next Steps (Future)**
-  - [ ] Create realistic human character rig in Blender (Mixamo, MakeHuman, or manual)
+  - [ ] **Find/integrate pose reference library**
+    - [ ] Research: Mixamo (free rigged characters), MakeHuman, or pose datasets
+    - [ ] Option 1: Download Mixamo characters and import to Blender
+    - [ ] Option 2: Use pose estimation datasets (COCO, MPII) for reference
+    - [ ] Option 3: Manual Blender rigging with pose library
+    - [ ] Decide on source and document in project
+  - [ ] Create realistic human character rig in Blender
   - [ ] Generate diverse pose library (standing, sitting, action poses)
   - [ ] Render multiple camera angles per pose
   - [ ] Add depth maps and normal maps to output
-  - [ ] Set up RunPod network volumes for persistence
   - [ ] Optional: Enable auto-shutdown in auto_process.sh
 
 - **Git / GitHub integration**
