@@ -28,16 +28,16 @@ Use Blender + AI to create custom 3D characters → Feed to rendering pipeline
 
 ### For Pose Rendering (Ready Now):
 ```bash
-cd pose-rendering/
-./scripts/render_pipeline.sh --batch
+cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
+./render_pipeline.sh --batch
 ```
 
 **Script will prompt for your POD_ID.** Result: 48 renders in ~2-3 minutes!
 
 ### For Character Creation (Coming Soon):
 ```bash
-cd character-creation/
-./scripts/character_pipeline.sh --create "athletic woman, age 25"
+cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
+./character_pipeline.sh --create "athletic woman, age 25"
 ```
 
 **Script will prompt for your POD_ID.** Result: Custom character FBX!
