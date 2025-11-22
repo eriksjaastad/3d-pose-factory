@@ -19,3 +19,5 @@ data/
 # OS/editor
 .DS_Store
 .vscode/
+character-creation/scripts/.pod_id
+pose-rendering/scripts/.pod_id
