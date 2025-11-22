@@ -44,9 +44,16 @@ exit_on_error() {
 }
 
 check_pod_connection() {
+    # Prompt for POD_ID if not set
     if [ -z "$POD_ID" ]; then
-        exit_on_error "RUNPOD_POD_ID not set. Please set it or pass --pod-id"
+        echo -e "${YELLOW}Enter your RunPod ID (e.g., 6gpur3lb2h5pzi-6441128f):${NC}"
+        read POD_ID
+        
+        if [ -z "$POD_ID" ]; then
+            exit_on_error "POD_ID is required. Please provide your RunPod instance ID."
+        fi
     fi
+    
     echo -e "${GREEN}✓ Pod ID: ${POD_ID}${NC}"
 }
 

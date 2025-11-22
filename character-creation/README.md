@@ -14,22 +14,25 @@ This workflow uses Blender's Python API + AI to create custom 3D characters for 
 
 **Status:** 🚧 Templates ready, tool selection in progress
 
-**Prerequisites:** RunPod instance running, POD_ID ready
+**Prerequisites:** RunPod instance running (have your POD_ID ready)
 
 ### When Ready, Usage Will Be:
 ```bash
-# Set your RunPod POD_ID
-export RUNPOD_POD_ID="your-pod-id-here"
-
-# Create character via AI script
+# Create character - script will prompt for POD_ID
 ./scripts/character_pipeline.sh --create "athletic woman, age 25"
 ```
 
-**That's it!** Uploads scripts → SSHs to pod → Creates character → Downloads FBX
+**That's it!** Upload → Create → Download - all automated!
 
 **Download only:**
 ```bash
 ./scripts/character_pipeline.sh --download-only
+```
+
+**Or set POD_ID in advance to skip the prompt:**
+```bash
+export RUNPOD_POD_ID="your-pod-id-here"
+./scripts/character_pipeline.sh --create "athletic woman, age 25"
 ```
 
 **Currently:** Researching best tool (Charmorph vs procedural modeling)
