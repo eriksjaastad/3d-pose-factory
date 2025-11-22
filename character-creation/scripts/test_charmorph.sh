@@ -70,7 +70,7 @@ ENDPYTHON
 echo -e "${BLUE}Running test on pod...${NC}"
 echo ""
 
-ssh -i "$SSH_KEY" root@${POD_ID}-ssh.runpod.io -p $SSH_PORT << ENDSSH
+ssh -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io << ENDSSH
 set -e
 
 # Write test script

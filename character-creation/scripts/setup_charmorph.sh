@@ -58,7 +58,7 @@ echo ""
 # SSH and install Charmorph
 echo -e "${BLUE}Connecting to pod and installing Charmorph...${NC}"
 
-ssh -i "$SSH_KEY" root@${POD_ID}-ssh.runpod.io -p $SSH_PORT << 'ENDSSH'
+ssh -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io << 'ENDSSH'
 set -e
 
 echo "=== Installing Charmorph Add-on ==="

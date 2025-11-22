@@ -72,7 +72,7 @@ ssh_and_create() {
     
     print_header "Connecting to RunPod and creating character"
     
-    ssh_command="ssh -i ${SSH_KEY} root@${POD_ID}-ssh.runpod.io -p ${SSH_PORT} \"
+    ssh_command="ssh -i ${SSH_KEY} ${POD_ID}@ssh.runpod.io \"
         mkdir -p ${POD_WORKSPACE} &&
         cd ${POD_WORKSPACE} &&
         rclone copy ${R2_REMOTE}/scripts/${CREATE_SCRIPT} ./ --progress &&
