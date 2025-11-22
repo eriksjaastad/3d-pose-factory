@@ -43,15 +43,15 @@
 
 ## SSH Access
 
-**Key location:** `~/.ssh/id_ed25519_runpod`
+**Key location:** `~/.ssh/id_ed25519`
 
 **Connection format:**
 ```bash
-ssh [POD-ID]@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+ssh [POD-ID]@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
 **Public key** (add to RunPod settings if not already there):
-Contents of `~/.ssh/id_ed25519_runpod.pub`
+Contents of `~/.ssh/id_ed25519.pub`
 
 ## Example Pod Used in Development
 

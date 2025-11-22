@@ -24,7 +24,7 @@ NC='\033[0m' # No Color
 LOCAL_PROJECT_DIR="/Users/eriksjaastad/projects/3D Pose Factory/character-creation"
 R2_REMOTE="r2_pose_factory:pose-factory/character-creation"
 POD_WORKSPACE="/workspace/pose-factory/character-creation"
-SSH_KEY="~/.ssh/id_ed25519_runpod"
+SSH_KEY="~/.ssh/id_ed25519"
 CREATE_SCRIPT="create_character.py"
 
 # RunPod connection (must be set by user or detected)

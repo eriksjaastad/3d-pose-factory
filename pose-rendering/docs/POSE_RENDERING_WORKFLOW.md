@@ -80,7 +80,7 @@ Saves one step if you know your current pod ID
 │                  (Blender installed here!)                       │
 │                                                                  │
 │  3. SSH to RunPod                                               │
-│     $ ssh -i ~/.ssh/id_ed25519_runpod root@...                 │
+│     $ ssh -i ~/.ssh/id_ed25519 root@...                 │
 │                                                                  │
 │  4. Download from R2                                            │
 │     $ rclone copy r2_pose_factory:.../characters/ characters/   │
@@ -150,7 +150,7 @@ rclone copy scripts/test_camera_framing.py r2_pose_factory:pose-factory/scripts/
 
 ```bash
 # Connect to your pod (use _runpod shortcut or SSH)
-# ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+# ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519
 
 # Navigate to workspace
 cd /workspace/pose-factory/

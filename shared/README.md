@@ -40,7 +40,7 @@ shared/
 # 2. Note your POD_ID and SSH port
 
 # 3. SSH in
-ssh -i ~/.ssh/id_ed25519_runpod root@YOUR_POD_ID-ssh.runpod.io -p PORT
+ssh -i ~/.ssh/id_ed25519 root@YOUR_POD_ID-ssh.runpod.io -p PORT
 
 # 4. Run setup script
 cd /workspace

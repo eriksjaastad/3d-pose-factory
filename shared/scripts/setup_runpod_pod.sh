@@ -64,7 +64,7 @@ pip install \
   boto3
 
 echo "[setup] Done. To use this environment next time, run:"
-echo "  ssh <pod-id>@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod"
+echo "  ssh <pod-id>@ssh.runpod.io -i ~/.ssh/id_ed25519"
 echo "  cd ${WORKDIR}"
 echo "  source .venv/bin/activate"
 

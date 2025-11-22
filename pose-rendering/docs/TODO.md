@@ -30,7 +30,7 @@
   - [x] Store credentials securely in `.r2_credentials` (in .gitignore)
 
 - **RunPod pod configuration**
-  - [x] SSH access to pod using dedicated `id_ed25519_runpod` key
+  - [x] SSH access to pod using dedicated `id_ed25519` key
   - [x] New pod deployed with working A40 GPU (Pod ID: 6gpur3lb2h5pzi-6441128f)
   - [x] Install Blender via `apt` + graphics libraries (libegl1, libgl1, libgomp1)
   - [x] Install Python 3 + pip

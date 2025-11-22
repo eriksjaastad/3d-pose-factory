@@ -47,7 +47,7 @@ cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
 rclone copy downloads/ r2_pose_factory:pose-factory/characters/
 
 # 2. SSH to RunPod and render
-ssh -i ~/.ssh/id_ed25519_runpod root@YOUR_POD_ID-ssh.runpod.io
+ssh -i ~/.ssh/id_ed25519 root@YOUR_POD_ID-ssh.runpod.io
 cd /workspace/pose-factory
 blender --background --python render_simple_working.py -- --batch
 

@@ -23,12 +23,12 @@ Follow these steps each time you want to process images with the 3D Pose Factory
 From your Mac terminal, connect using your RunPod SSH key:
 
 ```bash
-ssh [pod-id]@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+ssh [pod-id]@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
 **Example:**
 ```bash
-ssh 6gpur3lb2h5pzi-6441128f@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+ssh 6gpur3lb2h5pzi-6441128f@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
 Replace `[pod-id]` with the actual pod ID from RunPod dashboard.
@@ -136,7 +136,7 @@ cd /workspace/pose-factory && git pull
 ## Troubleshooting
 
 **"Permission denied (publickey)"**
-- Make sure you're using: `-i ~/.ssh/id_ed25519_runpod` (with `_runpod` at the end)
+- Make sure you're using: `-i ~/.ssh/id_ed25519` (with `_runpod` at the end)
 
 **"nvidia-smi: command not found"**
 - Pod started without GPU (zero GPU issue)

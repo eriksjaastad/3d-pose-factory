@@ -19,7 +19,7 @@ PROJECT_DIR="$HOME/projects/3D Pose Factory"
 R2_REMOTE="r2_pose_factory:pose-factory"
 POD_USER="root"
 POD_HOST=""  # You'll need to fill this in each time (or we can make it interactive)
-POD_KEY="$HOME/.ssh/id_ed25519_runpod"
+POD_KEY="$HOME/.ssh/id_ed25519"
 
 # Colors for output
 GREEN='\033[0;32m'

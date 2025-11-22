@@ -19,7 +19,7 @@ NC='\033[0m'
 # Config
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 POD_ID_FILE="${SCRIPT_DIR}/.pod_id"
-SSH_KEY="$HOME/.ssh/id_ed25519_runpod"
+SSH_KEY="$HOME/.ssh/id_ed25519"
 SSH_PORT="${RUNPOD_SSH_PORT:-22}"
 
 # Get POD_ID (from file, env var, or prompt)

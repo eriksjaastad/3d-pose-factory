@@ -88,10 +88,10 @@ rclone ls r2_pose_factory:pose-factory/scripts/ | grep blender
 
 ```bash
 # Use _runpod shortcut if you have it set up, or:
-ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519
 
 # Get your POD_ID from RunPod web UI
-# Example: ssh 6gpur3lb2h5pzi-6441128f@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+# Example: ssh 6gpur3lb2h5pzi-6441128f@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
 ### Setup Pod (Fresh Pod Only)
@@ -264,7 +264,7 @@ rclone copy scripts/render_multi_angle.py r2_pose_factory:pose-factory/scripts/
 # === ON RUNPOD ===
 
 # 3. Connect to RunPod (use _runpod shortcut or SSH)
-# ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519_runpod
+# ssh <POD_ID>@ssh.runpod.io -i ~/.ssh/id_ed25519
 
 # 4. Download from R2 to pod
 cd /workspace/pose-factory/

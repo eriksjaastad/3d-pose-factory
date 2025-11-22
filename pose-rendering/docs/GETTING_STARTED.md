@@ -19,7 +19,7 @@ rclone copy scripts/ r2_pose_factory:pose-factory/scripts/
 rclone copy downloads/ r2_pose_factory:pose-factory/characters/
 
 # 2. SSH to RunPod
-ssh -i ~/.ssh/id_ed25519_runpod root@<POD_ID>-ssh.runpod.io -p <PORT>
+ssh -i ~/.ssh/id_ed25519 root@<POD_ID>-ssh.runpod.io -p <PORT>
 
 # 3. Download to pod
 cd /workspace/pose-factory/
