@@ -7,10 +7,10 @@
 # 2. SSH to RunPod and trigger batch render
 # 3. Download results back to Mac
 #
-# Usage:
-#   ./render_pipeline.sh                  # Render all characters
-#   ./render_pipeline.sh --single         # Render just X Bot for testing
-#   ./render_pipeline.sh --download-only  # Just download existing results
+# Usage (from project root):
+#   pose-rendering/scripts/render_pipeline.sh --batch          # Render all characters
+#   pose-rendering/scripts/render_pipeline.sh --single         # Render just X Bot for testing
+#   pose-rendering/scripts/render_pipeline.sh --download-only  # Just download existing results
 
 set -e  # Exit on any error
 

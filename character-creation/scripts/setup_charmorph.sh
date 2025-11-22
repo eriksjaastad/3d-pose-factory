@@ -99,6 +99,8 @@ echo -e "${GREEN}╔════════════════════
 echo -e "${GREEN}║  ✓ Charmorph Setup Complete!          ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "${YELLOW}Next step: Run ./test_charmorph.sh to verify it works${NC}"
+echo -e "${YELLOW}Next step: Test the installation${NC}"
+echo ""
+echo -e "${BLUE}character-creation/scripts/test_charmorph.sh${NC}"
 echo ""
 
