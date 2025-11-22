@@ -12,12 +12,23 @@ This workflow renders Mixamo animated characters from 8 angles with automatic ca
 
 ## Quick Start
 
+**Prerequisites:** RunPod instance running, POD_ID ready
+
 ### One-Command Render (Recommended):
 ```bash
+# Set your RunPod POD_ID
+export RUNPOD_POD_ID="your-pod-id-here"
+
+# Run the full pipeline
 ./scripts/render_pipeline.sh --batch
 ```
 
-That's it! Upload → Render → Download all automated.
+**That's it!** Uploads scripts → SSHs to pod → Renders → Downloads results
+
+**Single character test:**
+```bash
+./scripts/render_pipeline.sh --single "Dancing Twerk.fbx"
+```
 
 ### Manual Steps:
 ```bash

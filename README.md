@@ -24,8 +24,14 @@ Use Blender + AI to create custom 3D characters → Feed to rendering pipeline
 
 ## Quick Start
 
+**Prerequisites:** RunPod instance running, POD_ID ready (see [shared/docs/RUNPOD_CONFIG.md](shared/docs/RUNPOD_CONFIG.md))
+
 ### For Pose Rendering (Ready Now):
 ```bash
+# Set your RunPod POD_ID
+export RUNPOD_POD_ID="your-pod-id-here"
+
+# Run the pipeline
 cd pose-rendering/
 ./scripts/render_pipeline.sh --batch
 ```
@@ -34,6 +40,10 @@ cd pose-rendering/
 
 ### For Character Creation (Coming Soon):
 ```bash
+# Set your RunPod POD_ID
+export RUNPOD_POD_ID="your-pod-id-here"
+
+# Create a character
 cd character-creation/
 ./scripts/character_pipeline.sh --create "athletic woman, age 25"
 ```
