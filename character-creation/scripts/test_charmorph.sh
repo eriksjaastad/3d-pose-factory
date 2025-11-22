@@ -70,19 +70,20 @@ ENDPYTHON
 echo -e "${BLUE}Running test on pod...${NC}"
 echo ""
 
-ssh -T -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io << ENDSSH
-set -e
-
-# Write test script
-cat > /tmp/test_charmorph.py << 'ENDTEST'
+# Write the Python test script to a temp file locally
+cat > /tmp/test_charmorph_local.py << 'ENDTEST'
 $TEST_SCRIPT
 ENDTEST
 
-# Run in Blender
-echo "Running Blender test..."
-blender --background --python /tmp/test_charmorph.py
+# Copy script to pod and execute
+scp -i "$SSH_KEY" /tmp/test_charmorph_local.py ${POD_ID}@ssh.runpod.io:/tmp/test_charmorph.py 2>&1 | grep -v "PTY"
 
-ENDSSH
+# Execute Blender test and capture output
+echo ""
+echo "=== Blender Test Output ==="
+ssh -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io "blender --background --python /tmp/test_charmorph.py 2>&1" | grep -v "PTY"
+echo "==========================="
+echo ""
 
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════╗${NC}"

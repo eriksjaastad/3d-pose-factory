@@ -12,30 +12,12 @@ This workflow renders Mixamo animated characters from 8 angles with automatic ca
 
 ## Quick Start
 
-**Prerequisites:** RunPod instance running (have your POD_ID ready)
-
 ### One-Command Render (Recommended):
 ```bash
-pose-rendering/scripts/render_pipeline.sh --batch
+./scripts/render_pipeline.sh --batch
 ```
 
-**The script will prompt you for your POD_ID.** Then: Upload → Render → Download - all automated!
-
-**Single character test:**
-```bash
-pose-rendering/scripts/render_pipeline.sh --single
-```
-
-**Skip to download only:**
-```bash
-pose-rendering/scripts/render_pipeline.sh --download-only
-```
-
-**Or set POD_ID in advance to skip the prompt:**
-```bash
-export RUNPOD_POD_ID="your-pod-id-here"
-pose-rendering/scripts/render_pipeline.sh --batch
-```
+That's it! Upload → Render → Download all automated.
 
 ### Manual Steps:
 ```bash
@@ -43,7 +25,7 @@ pose-rendering/scripts/render_pipeline.sh --batch
 rclone copy downloads/ r2_pose_factory:pose-factory/characters/
 
 # 2. SSH to RunPod and render
-ssh -i ~/.ssh/id_ed25519 root@YOUR_POD_ID-ssh.runpod.io
+ssh -i ~/.ssh/id_ed25519_runpod root@YOUR_POD_ID-ssh.runpod.io
 cd /workspace/pose-factory
 blender --background --python render_simple_working.py -- --batch
 
