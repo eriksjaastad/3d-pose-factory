@@ -16,29 +16,25 @@ This workflow renders Mixamo animated characters from 8 angles with automatic ca
 
 ### One-Command Render (Recommended):
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
-./render_pipeline.sh --batch
+pose-rendering/scripts/render_pipeline.sh --batch
 ```
 
 **The script will prompt you for your POD_ID.** Then: Upload → Render → Download - all automated!
 
 **Single character test:**
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
-./render_pipeline.sh --single
+pose-rendering/scripts/render_pipeline.sh --single
 ```
 
 **Skip to download only:**
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
-./render_pipeline.sh --download-only
+pose-rendering/scripts/render_pipeline.sh --download-only
 ```
 
 **Or set POD_ID in advance to skip the prompt:**
 ```bash
 export RUNPOD_POD_ID="your-pod-id-here"
-cd "/Users/eriksjaastad/projects/3D Pose Factory/pose-rendering/scripts"
-./render_pipeline.sh --batch
+pose-rendering/scripts/render_pipeline.sh --batch
 ```
 
 ### Manual Steps:

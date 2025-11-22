@@ -19,23 +19,20 @@ This workflow uses Blender's Python API + AI to create custom 3D characters for 
 ### When Ready, Usage Will Be:
 ```bash
 # Create character - script will prompt for POD_ID
-cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
-./character_pipeline.sh --create "athletic woman, age 25"
+character-creation/scripts/character_pipeline.sh --create "athletic woman, age 25"
 ```
 
 **That's it!** Upload → Create → Download - all automated!
 
 **Download only:**
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
-./character_pipeline.sh --download-only
+character-creation/scripts/character_pipeline.sh --download-only
 ```
 
 **Or set POD_ID in advance to skip the prompt:**
 ```bash
 export RUNPOD_POD_ID="your-pod-id-here"
-cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
-./character_pipeline.sh --create "athletic woman, age 25"
+character-creation/scripts/character_pipeline.sh --create "athletic woman, age 25"
 ```
 
 **Currently:** Researching best tool (Charmorph vs procedural modeling)
@@ -107,14 +104,12 @@ Once characters are created, they can be used with the pose-rendering workflow:
 
 ### 1. Install Charmorph on RunPod
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
-./setup_charmorph.sh
+character-creation/scripts/setup_charmorph.sh
 ```
 
 ### 2. Test Charmorph Installation
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory/character-creation/scripts"
-./test_charmorph.sh
+character-creation/scripts/test_charmorph.sh
 ```
 
 ### 3. Remaining Tasks
