@@ -69,19 +69,41 @@ ENDPYTHON
 # SSH and run test
 echo -e "${BLUE}Running test on pod...${NC}"
 echo ""
-
-# Write the Python test script to a temp file locally
-cat > /tmp/test_charmorph_local.py << 'ENDTEST'
-$TEST_SCRIPT
-ENDTEST
-
-# Copy script to pod and execute
-scp -i "$SSH_KEY" /tmp/test_charmorph_local.py ${POD_ID}@ssh.runpod.io:/tmp/test_charmorph.py 2>&1 | grep -v "PTY"
-
-# Execute Blender test and capture output
-echo ""
 echo "=== Blender Test Output ==="
-ssh -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io "blender --background --python /tmp/test_charmorph.py 2>&1" | grep -v "PTY"
+
+# Execute everything in one SSH command
+ssh -i "$SSH_KEY" ${POD_ID}@ssh.runpod.io bash -s 2>&1 << 'ENDSSH' | grep -v "PTY"
+# Create test script on remote
+cat > /tmp/test_charmorph.py << 'ENDPYTHON'
+import bpy
+import sys
+
+print("=== Charmorph Headless Test ===")
+
+# Try to enable Charmorph add-on
+try:
+    bpy.ops.preferences.addon_enable(module='CharMorph')
+    print("✓ Charmorph add-on enabled")
+except Exception as e:
+    print(f"✗ Failed to enable Charmorph: {e}")
+    sys.exit(1)
+
+# Check if Charmorph is available
+if 'CharMorph' in dir(bpy.ops):
+    print("✓ Charmorph operators available")
+else:
+    print("⚠ Charmorph operators not found")
+    print("Available ops:", [x for x in dir(bpy.ops) if not x.startswith('_')])
+
+print("")
+print("=== Test Complete ===")
+print("Next: Implement actual character generation")
+ENDPYTHON
+
+# Run Blender with the test script
+blender --background --python /tmp/test_charmorph.py 2>&1
+ENDSSH
+
 echo "==========================="
 echo ""
 
