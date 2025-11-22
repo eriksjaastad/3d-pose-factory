@@ -16,26 +16,36 @@ This workflow uses Blender's Python API + AI to create custom 3D characters for 
 
 **Prerequisites:** RunPod instance running (have your POD_ID ready)
 
-### When Ready, Usage Will Be:
+### Workflow:
+**Note:** RunPod's SSH only supports interactive sessions (not remote command execution)
+
+**Step 1 - Local:** Upload scripts to R2
 ```bash
-# Create character - script will prompt for POD_ID
-character-creation/scripts/character_pipeline.sh --create "athletic woman, age 25"
+character-creation/scripts/upload_to_r2.sh
 ```
 
-**That's it!** Upload → Create → Download - all automated!
-
-**Download only:**
+**Step 2 - SSH to RunPod:**
 ```bash
-character-creation/scripts/character_pipeline.sh --download-only
+ssh POD_ID@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
-**Or set POD_ID in advance to skip the prompt:**
+**Step 3 - On RunPod:** Run character creation
 ```bash
-export RUNPOD_POD_ID="your-pod-id-here"
-character-creation/scripts/character_pipeline.sh --create "athletic woman, age 25"
+cd /workspace/character-creation
+blender --background --python create_character.py -- --description "athletic woman, age 25"
 ```
 
-**Currently:** Researching best tool (Charmorph vs procedural modeling)
+**Step 4 - Upload results:**
+```bash
+rclone copy /workspace/character-creation/output/ r2_pose_factory:pose-factory/character-creation/output/
+```
+
+**Step 5 - Local:** Download results
+```bash
+rclone copy r2_pose_factory:pose-factory/character-creation/output/ character-creation/data/working/
+```
+
+**Status:** Testing Charmorph headless compatibility
 
 ---
 
@@ -102,20 +112,25 @@ Once characters are created, they can be used with the pose-rendering workflow:
 
 ## Next Steps
 
-### 1. Install Charmorph on RunPod
+### 1. Upload Scripts to R2 (From Your Mac)
 ```bash
-character-creation/scripts/setup_charmorph.sh
+character-creation/scripts/upload_to_r2.sh
 ```
 
-### 2. Test Charmorph Installation
+### 2. SSH to RunPod
 ```bash
-character-creation/scripts/test_charmorph.sh
+ssh to6i4tul7p9hk2-644113d9@ssh.runpod.io -i ~/.ssh/id_ed25519
 ```
 
-### 3. Remaining Tasks
-- ⏳ Verify Charmorph works headless
+### 3. Setup & Test Charmorph (On RunPod)
+```bash
+cd /workspace && rclone copy r2_pose_factory:pose-factory/character-creation/scripts/setup_and_test_charmorph.sh ./ && chmod +x setup_and_test_charmorph.sh && ./setup_and_test_charmorph.sh
+```
+
+### 4. Remaining Tasks
+- ⏳ Verify Charmorph works headless (test will show this)
 - ⏳ Create proof-of-concept character generation
-- ⏳ Complete character_pipeline.sh implementation
+- ⏳ Build workflow for character creation → export → rendering
 - ⏳ Test integration with pose rendering workflow
 
 ---
