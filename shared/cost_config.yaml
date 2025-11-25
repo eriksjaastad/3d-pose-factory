@@ -1,0 +1,67 @@
+# Cost Configuration for AI Render Providers
+# Last updated: 2025-11-24
+
+providers:
+  # Local rendering on RunPod GPU
+  local:
+    name: "RunPod GPU (Local)"
+    api_cost: 0.0
+    gpu_cost_per_hr: 0.42
+    avg_render_time_sec: 5  # Estimated average render time per image
+    description: "No API costs, only GPU time"
+
+  # Stability AI Platform API
+  stability:
+    name: "Stability AI"
+    base_cost: 0.002  # Base cost per generation
+    models:
+      sd_1_5:
+        name: "Stable Diffusion 1.5"
+        cost_multiplier: 1.0
+      sdxl:
+        name: "SDXL"
+        cost_multiplier: 2.0
+      sd_3:
+        name: "Stable Diffusion 3"
+        cost_multiplier: 3.0
+    resolution_multipliers:
+      512x512: 1.0
+      768x768: 1.5
+      1024x1024: 4.0
+      1536x1536: 9.0
+      2048x2048: 16.0
+    steps_cost_per_step: 0.00001
+    description: "Direct Stability AI API"
+
+  # DreamStudio (Stability AI's consumer interface)
+  dreamstudio:
+    name: "DreamStudio"
+    base_cost: 0.002
+    models:
+      sd_1_5:
+        name: "Stable Diffusion 1.5"
+        cost_multiplier: 1.0
+      sdxl:
+        name: "SDXL"
+        cost_multiplier: 2.0
+    resolution_multipliers:
+      512x512: 1.0
+      768x768: 1.5
+      1024x1024: 4.0
+      1536x1536: 9.0
+      2048x2048: 16.0
+    steps_cost_per_step: 0.00001
+    description: "Stability AI's DreamStudio interface"
+
+# Safety limits
+limits:
+  max_cost_per_job: 100.0  # Maximum cost for a single job
+  warning_threshold: 50.0   # Show warning above this amount
+  max_batch_size: 1000      # Maximum images in a single batch
+
+# Notes:
+# - Costs are in USD
+# - Resolution multipliers are relative to 512x512 baseline
+# - Steps cost is additional per step (typical: 20-100 steps)
+# - Local GPU cost is calculated as: (render_time_sec / 3600) * gpu_cost_per_hr
+

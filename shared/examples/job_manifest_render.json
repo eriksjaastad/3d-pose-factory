@@ -1,0 +1,15 @@
+{
+  "job_id": "render_20231124_153045_a1b2c3d4",
+  "job_type": "render",
+  "created_at": "2023-11-24T15:30:45.123456",
+  "status": "pending",
+  "params": {
+    "script": "pose-rendering/scripts/render_simple_working.py",
+    "characters": [
+      "X Bot",
+      "Salsa Dancing"
+    ],
+    "output_dir": "output/simple_multi_angle"
+  }
+}
+

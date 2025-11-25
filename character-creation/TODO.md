@@ -1,113 +1,56 @@
 # Character Creation TODO
 
-**Last Updated:** 2025-11-23
+## Current Focus 🎯
+**Goal:** Create proper 3D characters from reference images (not stretched!)
+
+- [ ] **Fix image-to-image pipeline** - Crop instead of stretch reference images
+- [ ] **Create 3D character from reference image** (Tomorrow's goal!)
+  - [ ] Smart crop (extract center square from portrait images)
+  - [ ] Test different image_similarity values (0.3, 0.5, 0.7, 0.9)
+  - [ ] Refine prompts for better style matching
+  - [ ] Generate test batch (5-10 variations)
+  - [ ] Compare quality vs text-only generation
+
+## AI Image Generation ✅ COMPLETE!
+- [x] Install AI Render (Stable Diffusion) plugin on pod
+- [x] Configure Stability AI API integration
+- [x] Create text-to-image golden script
+- [x] Create image-to-image pipeline script
+- [x] Test end-to-end generation (successful!)
+- [x] Document autosave requirements for headless mode
+
+## Tool Selection & Setup
+- [x] Research character creation tools (CharMorph, MB-Lab)
+- [x] Choose CharMorph as primary tool
+- [ ] Find and install CharMorph base mesh data
+- [ ] Test CharMorph in headless mode
+- [ ] Verify parametric controls work programmatically
+
+## Character Generation Script
+- [ ] Create `create_character.py` script
+- [ ] Implement parameter randomization
+- [ ] Add preset templates (athletic, slim, muscular, etc.)
+- [ ] Export to FBX with proper rigging
+- [ ] Integration with Mixamo for animation
+
+## Pipeline Integration
+- [ ] Mission Control job type: "character"
+- [ ] Character → Animate → Render full pipeline
+- [ ] Batch character generation (create 10, 50, 100 chars)
+- [ ] Character library management
+
+## Quality Improvements
+- [ ] Implement proper image cropping (preserve aspect ratio)
+- [ ] Add resolution upscaling option (512→1024)
+- [ ] Create prompt templates for different styles
+- [ ] Test different SDXL models/settings
 
 ---
 
-## ✅ What We Accomplished Today
-
-1. **Project Reorganization**
-   - Split into two independent workflows (pose-rendering / character-creation)
-   - Created clean directory structure
-   - Updated all READMEs with correct paths
-
-2. **RunPod Setup**
-   - Discovered RunPod SSH only works interactively (not remote execution)
-   - Set up persistent rclone config in `/workspace/.config/`
-   - Installed Blender 4.0.2 on pod
-   - Created working upload/download workflow via R2
-
-3. **CharMorph Investigation**
-   - ✅ CharMorph installed successfully
-   - ✅ 30 operators available in headless Blender
-   - ❌ Missing base mesh data files
-   - **Status:** Tool works, just needs data
-
----
-
-## 🚧 Current Blockers
-
-### CharMorph Base Mesh Data
-- CharMorph needs base human meshes to modify
-- Data repository doesn't exist at expected location
-- **Next steps:**
-  - Search CharMorph forums/docs for base mesh downloads
-  - Check if base meshes are in addon updater
-  - Alternative: Find compatible base mesh elsewhere
-
----
-
-## 📋 Next Steps (Priority Order)
-
-### High Priority
-1. **Find CharMorph Base Mesh**
-   - Check CharMorph GitHub issues/wiki
-   - Look for addon data downloads
-   - Check Blender Artists forum threads
-   - Alternative: Download MB-Lab base mesh (compatible?)
-
-2. **Create Pod Init Script**
-   - One command to set up new pod
-   - Auto-creates rclone symlink
-   - Downloads all needed scripts
-   - No more Mac ↔ Pod jumping
-
-3. **Test Character Generation**
-   - Once base mesh found, test CharMorph headless
-   - Create simple "generate random character" script
-   - Export to FBX
-
-### Medium Priority
-4. **Build Character Workflow**
-   - Upload → Generate → Download automation
-   - Integrate with pose rendering pipeline
-   - Document in README
-
-5. **Alternative Research**
-   - MB-Lab (archived but might work)
-   - Procedural generation (hard mode)
-   - Pre-made base mesh + modifications
-
----
-
-## 💡 Key Learnings
-
-1. **RunPod SSH:**
-   - Only interactive sessions work
-   - Must SSH in, then run commands on pod
-   - Can't execute commands remotely
-
-2. **Persistence:**
-   - Only `/workspace` survives pod restarts
-   - Store rclone config there, symlink to `~/.config`
-   - Scripts must be re-downloaded or kept in `/workspace`
-
-3. **CharMorph:**
-   - Not a mesh generator, it's a mesh MODIFIER
-   - Needs base human mesh data
-   - Works great headless once data is available
-
----
-
-## 🎯 End Goal
-
-**Working character creation workflow:**
-1. Run one script locally (upload)
-2. SSH to pod
-3. Run character generation command
-4. Download FBX character
-5. Use with pose rendering pipeline
-
-**Status:** 70% there - just need base mesh data!
-
----
-
-## 📝 Notes for Tomorrow
-
-- Don't forget: rclone config is in `/workspace/.config/rclone/`
-- CharMorph is at `~/.config/blender/4.0/scripts/addons/CharMorph/`
-- Blender version: 4.0.2
-- Pod setup script exists: `/workspace/setup_pod.sh`
-
-**Mood:** Productive day despite hitting the data wall. Close to breakthrough!
-
+**Status:** AI Generation Working! 🎨✅
+- SSH Agent operational (automated command execution)
+- AI Render integrated with Stability AI SDXL
+- Text-to-image: Working perfectly
+- Image-to-image: Working but needs crop improvement
+- Cost: ~$0.04 per 1024x1024 image
+- **Next:** Fix cropping, refine quality

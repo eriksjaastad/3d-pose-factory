@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse-slow {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .status-pending { color: #FFA500; }
+        .status-processing { color: #2196F3; }
+        .status-completed { color: #4CAF50; }
+        .status-unknown { color: #999; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">🚀 Mission Control</h1>
+            <p class="text-gray-400">Because terminals are sad.</p>
+        </div>
+
+        <!-- Pod Management Section -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8 border border-gray-700">
+            <h2 class="text-2xl font-semibold mb-4">⚡ Pod Management</h2>
+            
+            <div id="noPod" class="space-y-4">
+                <p class="text-gray-400">No pod running. Start one to begin rendering!</p>
+                <button 
+                    onclick="startPod()"
+                    id="startPodBtn"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded transition duration-200"
+                >
+                    ⚡ Start Pod (A40 GPU)
+                </button>
+                <p class="text-xs text-gray-500">
+                    <span class="pod-price">~$0.42/hr</span> • Auto-installs Blender and starts job agent • Ready in ~2 minutes
+                </p>
+            </div>
+
+            <div id="podRunning" class="hidden space-y-4">
+                <div class="bg-gray-700 rounded p-4 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-green-400 text-2xl pulse-slow">●</span>
+                            <div>
+                                <div class="font-semibold">Pod Running</div>
+                                <div class="text-sm text-gray-400">GPU: <span id="podGpu">A40</span> • ID: <span id="podIdDisplay" class="font-mono text-xs"></span></div>
+                            </div>
+                        </div>
+                        <button 
+                            onclick="stopPod()"
+                            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                        >
+                            ⏹️ Stop Pod
+                        </button>
+                    </div>
+                    <div class="text-xs text-gray-500">
+                        💰 Cost: <span class="pod-price">~$0.42/hr</span> • Agent polling R2 every 30s • Ready to accept jobs
+                    </div>
+                </div>
+            </div>
+
+            <div id="podStarting" class="hidden">
+                <div class="bg-blue-900 border border-blue-600 text-blue-200 px-4 py-3 rounded">
+                    <p class="font-semibold">🚀 Pod is starting...</p>
+                    <p class="text-sm mt-1">Installing Blender, Python packages, and starting agent. This takes ~2 minutes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Job Form -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8 border border-gray-700">
+            <h2 class="text-2xl font-semibold mb-4">➕ New Job</h2>
+            
+            <form id="jobForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Job Type</label>
+                    <select id="jobType" class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white">
+                        <option value="render">Render (Pose Generation)</option>
+                        <option value="ai_render">AI Render (Stable Diffusion) - Coming Soon</option>
+                        <option value="character" disabled>Character Creation - Coming Soon</option>
+                    </select>
+                </div>
+
+                <!-- AI Render Options (Hidden by default) -->
+                <div id="aiRenderOptions" class="hidden space-y-4">
+                    <div class="bg-yellow-900 border border-yellow-600 text-yellow-200 px-4 py-3 rounded text-sm">
+                        💰 <strong>Cost Calculator Active</strong> - Estimates shown in real-time
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Provider</label>
+                        <select id="provider" onchange="updateCostEstimate()" class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white">
+                            <option value="local">Local GPU (RunPod) - No API Cost</option>
+                            <option value="stability">Stability AI</option>
+                            <option value="dreamstudio">DreamStudio</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Resolution</label>
+                            <select id="resolution" onchange="updateCostEstimate()" class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white">
+                                <option value="512x512">512×512</option>
+                                <option value="768x768">768×768</option>
+                                <option value="1024x1024" selected>1024×1024</option>
+                                <option value="1536x1536">1536×1536</option>
+                                <option value="2048x2048">2048×2048</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Steps</label>
+                            <input 
+                                type="number" 
+                                id="steps" 
+                                value="30" 
+                                min="10" 
+                                max="150"
+                                onchange="updateCostEstimate()"
+                                class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white"
+                            >
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Model</label>
+                        <select id="model" onchange="updateCostEstimate()" class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white">
+                            <option value="sd_1_5">Stable Diffusion 1.5</option>
+                            <option value="sdxl" selected>SDXL</option>
+                            <option value="sd_3">Stable Diffusion 3</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Number of Images</label>
+                        <input 
+                            type="number" 
+                            id="imageCount" 
+                            value="10" 
+                            min="1" 
+                            max="1000"
+                            onchange="updateCostEstimate()"
+                            class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white"
+                        >
+                    </div>
+
+                    <!-- Cost Estimate Display -->
+                    <div id="costEstimate" class="bg-gray-900 border border-gray-600 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium text-gray-400">Estimated Cost</span>
+                            <span id="costTotal" class="text-2xl font-bold text-green-400">$0.00</span>
+                        </div>
+                        <div id="costBreakdown" class="text-xs text-gray-500 space-y-1">
+                            <p>Provider: <span id="costProvider">-</span></p>
+                            <p>Per image: <span id="costPerImage">$0.00</span></p>
+                            <p>Count: <span id="costCount">0</span> images</p>
+                        </div>
+                        <div id="localGpuNote" class="hidden mt-2 text-blue-400 text-sm">
+                            💡 <strong>Local GPU:</strong> No API costs! Only GPU time (~$0.0006/image)
+                        </div>
+                        <div id="costWarning" class="hidden mt-2 text-yellow-400 text-sm">
+                            ⚠️ <span id="costWarningMessage"></span>
+                        </div>
+                        <div id="costError" class="hidden mt-2 text-red-400 text-sm">
+                            🚫 <span id="costErrorMessage"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pose Render Options (Shown by default) -->
+                <div id="poseRenderOptions" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">
+                            Characters 
+                            <span class="text-gray-500 text-xs">(comma-separated, leave empty for all)</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="characters" 
+                            placeholder="X Bot, Salsa Dancing"
+                            class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white placeholder-gray-500"
+                        >
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Output Directory</label>
+                        <input 
+                            type="text" 
+                            id="outputDir" 
+                            value="output/simple_multi_angle"
+                            class="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white"
+                        >
+                    </div>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded transition duration-200"
+                >
+                    Submit Job
+                </button>
+            </form>
+
+            <div id="submitMessage" class="mt-4 hidden">
+                <div class="bg-green-900 border border-green-600 text-green-200 px-4 py-3 rounded">
+                    <p class="font-semibold">✅ Job submitted!</p>
+                    <p class="text-sm mt-1" id="submitDetails"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job List -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold">📊 Job Queue</h2>
+                <button 
+                    onclick="refreshJobs()" 
+                    class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition duration-200"
+                >
+                    🔄 Refresh
+                </button>
+            </div>
+
+            <div id="jobList" class="space-y-3">
+                <div class="text-center py-8 text-gray-500">
+                    <div class="pulse-slow inline-block">Loading jobs...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pod Status (placeholder for Phase 2) -->
+        <div class="mt-6 text-center text-gray-500 text-sm">
+            🤖 Pod monitoring coming in Phase 2
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh jobs every 10 seconds
+        let refreshInterval;
+
+        // Global pricing
+        let podCostPerHr = 0.42; // Default fallback
+
+        // Load jobs, pod status, and pricing on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGpuPricing();
+            refreshPodStatus();
+            refreshJobs();
+            refreshInterval = setInterval(() => {
+                refreshJobs();
+                refreshPodStatus();
+            }, 10000);
+            
+            // Initial cost estimate
+            updateCostEstimate();
+            
+            // Job type switcher
+            document.getElementById('jobType').addEventListener('change', function() {
+                const jobType = this.value;
+                if (jobType === 'ai_render') {
+                    document.getElementById('aiRenderOptions').classList.remove('hidden');
+                    document.getElementById('poseRenderOptions').classList.add('hidden');
+                    updateCostEstimate();
+                } else {
+                    document.getElementById('aiRenderOptions').classList.add('hidden');
+                    document.getElementById('poseRenderOptions').classList.remove('hidden');
+                }
+            });
+        });
+
+        // Load GPU pricing from API
+        function loadGpuPricing() {
+            fetch('/api/gpu/pricing')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.a40 && data.a40.cost_per_hr) {
+                        podCostPerHr = data.a40.cost_per_hr;
+                        updatePricingDisplay();
+                    }
+                })
+                .catch(err => console.log('Using fallback pricing'));
+        }
+
+        // Update pricing in UI
+        function updatePricingDisplay() {
+            const priceText = `~$${podCostPerHr.toFixed(2)}/hr`;
+            document.querySelectorAll('.pod-price').forEach(el => {
+                el.textContent = priceText;
+            });
+        }
+
+        // Update cost estimate for AI rendering
+        function updateCostEstimate() {
+            const provider = document.getElementById('provider').value;
+            const resolution = document.getElementById('resolution').value;
+            const steps = parseInt(document.getElementById('steps').value);
+            const model = document.getElementById('model').value;
+            const count = parseInt(document.getElementById('imageCount').value);
+
+            fetch('/api/cost/estimate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    provider: provider,
+                    resolution: resolution,
+                    steps: steps,
+                    model: model,
+                    count: count
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Update cost display
+                    const cost = data.cost;
+                    const isLocal = cost.provider === 'local';
+                    
+                    // Format cost (show more decimals for tiny amounts)
+                    const totalCost = cost.total < 0.01 ? 
+                        `$${cost.total.toFixed(4)}` : 
+                        `$${cost.total.toFixed(2)}`;
+                    const perImageCost = cost.per_image < 0.01 ? 
+                        `$${cost.per_image.toFixed(6)}` : 
+                        `$${cost.per_image.toFixed(4)}`;
+                    
+                    document.getElementById('costTotal').textContent = totalCost;
+                    document.getElementById('costPerImage').textContent = perImageCost;
+                    document.getElementById('costCount').textContent = cost.count;
+                    document.getElementById('costProvider').textContent = cost.provider_name;
+
+                    // Show/hide local GPU note
+                    const localNoteEl = document.getElementById('localGpuNote');
+                    if (isLocal) {
+                        localNoteEl.classList.remove('hidden');
+                    } else {
+                        localNoteEl.classList.add('hidden');
+                    }
+
+                    // Update warning/error
+                    const validation = data.validation;
+                    const warningEl = document.getElementById('costWarning');
+                    const errorEl = document.getElementById('costError');
+                    
+                    if (!validation.is_safe) {
+                        // Exceeds limit
+                        errorEl.classList.remove('hidden');
+                        warningEl.classList.add('hidden');
+                        localNoteEl.classList.add('hidden');
+                        document.getElementById('costErrorMessage').textContent = validation.message;
+                        document.getElementById('submitBtn').disabled = true;
+                        document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+                    } else if (validation.message.toLowerCase().includes('warning')) {
+                        // Warning threshold
+                        warningEl.classList.remove('hidden');
+                        errorEl.classList.add('hidden');
+                        document.getElementById('costWarningMessage').textContent = validation.message;
+                        document.getElementById('submitBtn').disabled = false;
+                        document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        // Safe
+                        warningEl.classList.add('hidden');
+                        errorEl.classList.add('hidden');
+                        document.getElementById('submitBtn').disabled = false;
+                        document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Error estimating cost:', err);
+            });
+        }
+
+        // Refresh pod status
+        function refreshPodStatus() {
+            fetch('/api/pod/current')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.pod && data.pod.status === 'RUNNING') {
+                        document.getElementById('noPod').classList.add('hidden');
+                        document.getElementById('podRunning').classList.remove('hidden');
+                        document.getElementById('podStarting').classList.add('hidden');
+                        document.getElementById('podIdDisplay').textContent = data.pod.id;
+                        
+                        // Update cost if available
+                        if (data.pod.cost_per_hr) {
+                            podCostPerHr = data.pod.cost_per_hr;
+                            updatePricingDisplay();
+                        }
+                    } else if (data.pod && data.pod.status === 'STARTING') {
+                        document.getElementById('noPod').classList.add('hidden');
+                        document.getElementById('podRunning').classList.add('hidden');
+                        document.getElementById('podStarting').classList.remove('hidden');
+                    } else {
+                        document.getElementById('noPod').classList.remove('hidden');
+                        document.getElementById('podRunning').classList.add('hidden');
+                        document.getElementById('podStarting').classList.add('hidden');
+                    }
+                })
+                .catch(err => {
+                    console.log('No pod running');
+                    document.getElementById('noPod').classList.remove('hidden');
+                    document.getElementById('podRunning').classList.add('hidden');
+                    document.getElementById('podStarting').classList.add('hidden');
+                });
+        }
+
+        // Start pod
+        function startPod() {
+            const btn = document.getElementById('startPodBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Starting Pod...';
+
+            fetch('/api/pod/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('noPod').classList.add('hidden');
+                    document.getElementById('podStarting').classList.remove('hidden');
+                    
+                    // Poll for status
+                    setTimeout(refreshPodStatus, 5000);
+                } else {
+                    alert('Failed to start pod: ' + (data.error || 'Unknown error'));
+                    btn.disabled = false;
+                    btn.textContent = '⚡ Start Pod (A40 GPU)';
+                }
+            })
+            .catch(err => {
+                console.error('Error starting pod:', err);
+                alert('Failed to start pod. Check console for details.');
+                btn.disabled = false;
+                btn.textContent = '⚡ Start Pod (A40 GPU)';
+            });
+        }
+
+        // Stop pod
+        function stopPod() {
+            if (!confirm('Stop the pod? This will halt all running jobs.')) {
+                return;
+            }
+
+            fetch('/api/pod/stop', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    refreshPodStatus();
+                } else {
+                    alert('Failed to stop pod: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error('Error stopping pod:', err);
+                alert('Failed to stop pod. Check console for details.');
+            });
+        }
+
+        // Job form submission
+        document.getElementById('jobForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const characters = document.getElementById('characters').value.trim();
+            const outputDir = document.getElementById('outputDir').value.trim();
+            
+            const payload = {
+                job_type: 'render',
+                characters: characters ? characters.split(',').map(c => c.trim()) : [],
+                output_dir: outputDir
+            };
+
+            try {
+                const response = await fetch('/api/jobs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('submitMessage').classList.remove('hidden');
+                    document.getElementById('submitDetails').textContent = `Job ID: ${data.job_id}`;
+                    
+                    // Clear form
+                    document.getElementById('characters').value = '';
+                    
+                    // Refresh job list
+                    setTimeout(refreshJobs, 1000);
+
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('submitMessage').classList.add('hidden');
+                    }, 5000);
+                }
+            } catch (error) {
+                console.error('Error submitting job:', error);
+                alert('Failed to submit job. Check console for details.');
+            }
+        });
+
+        // Refresh job list
+        async function refreshJobs() {
+            try {
+                const response = await fetch('/api/jobs');
+                const jobs = await response.json();
+
+                const jobList = document.getElementById('jobList');
+
+                if (jobs.length === 0) {
+                    jobList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            No jobs yet. Submit your first job above! 🚀
+                        </div>
+                    `;
+                    return;
+                }
+
+                jobList.innerHTML = jobs.map(job => `
+                    <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="font-mono text-sm text-gray-400">${job.job_id}</span>
+                                    <span class="status-${job.status} font-semibold">${getStatusIcon(job.status)} ${job.status.toUpperCase()}</span>
+                                </div>
+                                <div class="text-sm text-gray-400">
+                                    <p>Type: ${job.job_type}</p>
+                                    ${job.params.characters && job.params.characters.length > 0 ? 
+                                        `<p>Characters: ${job.params.characters.join(', ')}</p>` : 
+                                        '<p>Characters: All</p>'
+                                    }
+                                    <p>Created: ${new Date(job.created_at).toLocaleString()}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                ${job.status === 'completed' ? `
+                                    <button 
+                                        onclick="downloadJob('${job.job_id}')"
+                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition duration-200"
+                                    >
+                                        📥 Download
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+                document.getElementById('jobList').innerHTML = `
+                    <div class="text-center py-8 text-red-400">
+                        ❌ Failed to load jobs. Check console for details.
+                    </div>
+                `;
+            }
+        }
+
+        // Download job results
+        async function downloadJob(jobId) {
+            try {
+                const response = await fetch(`/api/jobs/${jobId}/download`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`✅ Download complete!\n\nResults saved to:\n${data.path}`);
+                } else {
+                    alert(`❌ Download failed: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error downloading job:', error);
+                alert('Failed to download job. Check console for details.');
+            }
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'pending': return '⏳';
+                case 'processing': return '🔄';
+                case 'completed': return '✅';
+                default: return '❓';
+            }
+        }
+    </script>
+</body>
+</html>
+

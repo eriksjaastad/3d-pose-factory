@@ -1,0 +1,18 @@
+{
+  "job_id": "character_20231124_160000_x9y8z7w6",
+  "job_type": "character",
+  "created_at": "2023-11-24T16:00:00.000000",
+  "status": "pending",
+  "params": {
+    "script": "character-creation/scripts/create_character.py",
+    "character_params": {
+      "gender": "female",
+      "age": 25,
+      "body_type": "athletic",
+      "ethnicity": "mixed",
+      "randomize": false
+    },
+    "output_dir": "output/characters"
+  }
+}
+

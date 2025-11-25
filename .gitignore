@@ -15,6 +15,15 @@ data/
 # Secrets
 .r2_credentials
 .env
+shared/.env
+.pod_id
+*.key
+*.pem
+runpod
+runpod.pub
+
+# Command queue (contains command history)
+ops_queue/
 
 # OS/editor
 .DS_Store
