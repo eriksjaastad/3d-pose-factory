@@ -770,6 +770,422 @@ shared/scripts/bootstrap_pod.py
 
 ---
 
-**END OF SPECIFICATION**
+---
 
-*This document defines the "as-is" contract of the 3D Pose Factory system. Security review will be conducted as a separate phase.*
+# PART 2: DNA SECURITY AUDIT
+
+**Audit Date**: 2026-01-08
+**Standard**: Gold Standard DNA Security
+**Status**: 🔴 CRITICAL DEFECTS FOUND
+
+---
+
+## DNA Security Summary
+
+| Category | Count | Severity |
+|----------|-------|----------|
+| Hardcoded User Paths | 28+ | **P0 CRITICAL** |
+| Environment Variable Mapping (Doppler) | 4 | **P0 REQUIRED** |
+| Path Traversal Vulnerabilities | 6 | **P0 CRITICAL** |
+| Missing safe_slug() | 5 | **P0 CRITICAL** |
+| Credential Exposure Risk | 3 | **P1 HIGH** |
+
+---
+
+## P0 DNA DEFECT: ABSOLUTE-PATH-001 — Hardcoded User Paths
+
+**Severity**: 🔴 CRITICAL
+**Standard Violation**: All paths must be relative or environment-configured
+
+### Violations in Source Code
+
+| File | Line | Hardcoded Path |
+|------|------|----------------|
+| `shared/scripts/bootstrap_pod.py` | 26 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue` |
+| `shared/scripts/bootstrap_pod.py` | 27-28 | REQUESTS, RESULTS derived from above |
+
+```python
+# bootstrap_pod.py:26-28 — CRITICAL FAILURE
+OPS_QUEUE = Path("/Users/eriksjaastad/projects/_tools/ssh_agent/queue")
+REQUESTS = OPS_QUEUE / "requests.jsonl"
+RESULTS = OPS_QUEUE / "results.jsonl"
+```
+
+**Impact**: Script completely unusable by any developer except original author.
+
+### Violations in Documentation (Must Be Parameterized)
+
+| File | Count | Example Path |
+|------|-------|--------------|
+| `QUICKSTART.md` | 9 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
+| `PIPELINE_OVERVIEW.md` | 10 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
+| `ssh_agent_protocol.md` | 6 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
+| `BLENDER_AI_FULL_DREAM_PIPELINE.md` | 2 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
+| `.cursorrules` | 3 | `/Users/eriksjaastad/projects/` |
+| `README.md` | 2 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
+| `dashboard/app.py` (docstring) | 2 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
+| `shared/scripts/mission_control.py` (docstring) | 1 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
+| `shared/docs/*.md` | 5+ | Various user paths |
+| `pose-rendering/docs/*.md` | 20+ | `~/projects/3D Pose Factory/` |
+
+**Total**: 28+ hardcoded user-specific paths across codebase.
+
+### Required Fix
+
+```python
+# BEFORE (DEFECT)
+OPS_QUEUE = Path("/Users/eriksjaastad/projects/_tools/ssh_agent/queue")
+
+# AFTER (COMPLIANT)
+OPS_QUEUE = Path(os.getenv("SSH_AGENT_QUEUE_PATH", str(Path.home() / ".ssh_agent/queue")))
+```
+
+---
+
+## P0 DNA DEFECT: ABSOLUTE-PATH-002 — Hardcoded Pod Paths
+
+**Severity**: 🟠 HIGH
+**Note**: `/workspace` is acceptable for RunPod-specific code, but must be configurable.
+
+### Violations
+
+| File | Line | Path |
+|------|------|------|
+| `pose-rendering/scripts/render_simple_working.py` | 141-142 | `/workspace/pose-factory/` |
+| `pose-rendering/scripts/render_multi_angle.py` | 219-224 | `/workspace/pose-factory/` |
+| `pose-rendering/scripts/blender_camera_utils.py` | 359-360 | `/workspace/pose-factory/` |
+| `shared/scripts/generate_character_from_cube.py` | 34 | `/workspace/output/` |
+| `config/config.yaml` | 8-9, 26 | `/workspace/pose-factory/` |
+
+**Required Fix**: Use `WORKSPACE_ROOT` environment variable with `/workspace` default.
+
+---
+
+## P0 DNA DEFECT: DOPPLER-001 — Environment Variable Mapping Required
+
+**Severity**: 🔴 CRITICAL
+**Standard**: All `os.getenv` calls must be mapped to Doppler naming convention.
+
+### Current Environment Variables Found
+
+| File | Line | Current Variable | Doppler Name Required |
+|------|------|------------------|----------------------|
+| `dashboard/app.py` | 40 | `RUNPOD_API_KEY` | `RUNPOD_API_KEY` ✅ |
+| `character-creation/scripts/stability_control.py` | 55-56 | `STABILITY_API_KEY` | `STABILITY_API_KEY` ✅ |
+| `character-creation/scripts/stability_enhance.py` | 55-56 | `STABILITY_API_KEY` | `STABILITY_API_KEY` ✅ |
+| `shared/scripts/setup_pod.sh` | 165-166 | `DREAMSTUDIO_API_KEY`, `STABILITY_API_KEY` | ✅ |
+
+### Missing Environment Variables (Must Be Added)
+
+| Purpose | Proposed Doppler Name | Current State |
+|---------|----------------------|---------------|
+| SSH Agent Queue Path | `SSH_AGENT_QUEUE_PATH` | **HARDCODED** `/Users/eriksjaastad/...` |
+| R2 Remote Name | `R2_REMOTE_NAME` | **HARDCODED** `r2_pose_factory:pose-factory` |
+| Pod Workspace Root | `WORKSPACE_ROOT` | **HARDCODED** `/workspace` |
+| Flask Debug Mode | `FLASK_DEBUG` | **HARDCODED** `True` |
+
+### Doppler Configuration Required
+
+```yaml
+# doppler.yaml (proposed)
+development:
+  RUNPOD_API_KEY: "op://vault/runpod/api-key"
+  STABILITY_API_KEY: "op://vault/stability/api-key"
+  DREAMSTUDIO_API_KEY: "op://vault/dreamstudio/api-key"
+  SSH_AGENT_QUEUE_PATH: "${HOME}/.ssh_agent/queue"
+  R2_REMOTE_NAME: "r2_pose_factory:pose-factory"
+  WORKSPACE_ROOT: "/workspace"
+  FLASK_DEBUG: "true"
+
+production:
+  FLASK_DEBUG: "false"
+  # Same keys, production values from vault
+```
+
+---
+
+## P0 DNA DEFECT: PATH-TRAVERSAL-001 — Unsanitized User Input in File Paths
+
+**Severity**: 🔴 CRITICAL
+**Standard**: All user-supplied path components must use `safe_slug()`.
+
+### Vulnerability #1: Job ID Path Traversal
+
+**File**: `dashboard/app.py:184`
+
+```python
+@app.route('/api/jobs/<job_id>', methods=['GET'])
+def get_job(job_id):
+    # VULNERABILITY: job_id is unsanitized user input
+    manifest_file = PROJECT_ROOT / "data" / "jobs" / f"{job_id}.json"
+    #                                                  ^^^^^^^ DANGER
+```
+
+**Attack Vector**:
+```bash
+curl http://localhost:5001/api/jobs/..%2F..%2F..%2Fetc%2Fpasswd
+# Attempts to read: PROJECT_ROOT/data/jobs/../../../etc/passwd.json
+```
+
+### Vulnerability #2: Job ID in Shell Commands
+
+**File**: `dashboard/app.py:69, 74, 79, 209`
+
+```python
+def get_job_status(job_id):
+    # VULNERABILITY: job_id passed directly to rclone command
+    result = run_rclone(["lsf", f"{R2_REMOTE}/{RESULTS_PATH}/{job_id}/"])
+    #                                                        ^^^^^^^ DANGER
+```
+
+### Vulnerability #3: Download Path Traversal
+
+**File**: `dashboard/app.py:206`
+
+```python
+@app.route('/api/jobs/<job_id>/download', methods=['POST'])
+def download_job(job_id):
+    # VULNERABILITY: job_id controls output directory
+    output_dir = PROJECT_ROOT / "data" / "working" / job_id
+    #                                                ^^^^^^^ DANGER
+```
+
+### Vulnerability #4: Output Directory from User Input
+
+**File**: `dashboard/app.py:168`
+
+```python
+params = {
+    "output_dir": data.get('output_dir', 'output/simple_multi_angle')
+    #             ^^^^^^^^^^^^^^^^^^^^^^^^ UNSANITIZED USER INPUT
+}
+```
+
+### Vulnerability #5: Character Names from User Input
+
+**File**: `dashboard/app.py:167`
+
+```python
+params = {
+    "characters": data.get('characters', []),
+    #             ^^^^^^^^^^^^^^^^^^^^^^^^^ UNSANITIZED — used in file paths later
+}
+```
+
+### Vulnerability #6: Pod ID in File Operations
+
+**File**: `dashboard/app.py:244, 250-251`
+
+```python
+pod_id = data.get('pod_id', '').strip()
+pod_id_file = PROJECT_ROOT / ".pod_id"
+with open(pod_id_file, 'w') as f:
+    f.write(pod_id)  # Unsanitized write
+```
+
+---
+
+## P0 DNA DEFECT: SAFE-SLUG-001 — Missing safe_slug() Implementation
+
+**Severity**: 🔴 CRITICAL
+**Standard**: `safe_slug()` function MUST exist and be used for all user-supplied path components.
+
+### Current State
+
+**`safe_slug()` does NOT exist in this codebase.**
+
+### Required Implementation
+
+```python
+# shared/security.py (NEW FILE REQUIRED)
+import re
+from typing import Optional
+
+def safe_slug(value: str, max_length: int = 64, allow_dots: bool = False) -> str:
+    """
+    Convert user input to a safe filesystem slug.
+
+    DNA Security Standard compliant.
+
+    Args:
+        value: User-supplied string
+        max_length: Maximum length of output (default 64)
+        allow_dots: Whether to allow dots (for file extensions)
+
+    Returns:
+        Sanitized slug safe for filesystem paths
+
+    Raises:
+        ValueError: If input is empty or resolves to empty string
+    """
+    if not value:
+        raise ValueError("Empty slug not allowed")
+
+    # Remove any path traversal attempts
+    value = value.replace('..', '').replace('/', '').replace('\\', '')
+
+    # Define allowed characters
+    if allow_dots:
+        pattern = r'[^a-zA-Z0-9_.-]'
+    else:
+        pattern = r'[^a-zA-Z0-9_-]'
+
+    # Allow only safe characters
+    slug = re.sub(pattern, '_', value)
+
+    # Collapse multiple underscores
+    slug = re.sub(r'_+', '_', slug)
+
+    # Strip leading/trailing underscores and dots
+    slug = slug.strip('_.')
+
+    # Enforce max length
+    if len(slug) > max_length:
+        slug = slug[:max_length].rstrip('_.')
+
+    if not slug:
+        raise ValueError("Slug resolved to empty string")
+
+    return slug
+```
+
+### Required Usage in dashboard/app.py
+
+```python
+from shared.security import safe_slug
+
+@app.route('/api/jobs/<job_id>', methods=['GET'])
+def get_job(job_id):
+    try:
+        safe_job_id = safe_slug(job_id)
+    except ValueError:
+        return jsonify({"error": "Invalid job ID"}), 400
+
+    manifest_file = PROJECT_ROOT / "data" / "jobs" / f"{safe_job_id}.json"
+    # ... rest of function
+```
+
+---
+
+## P1 DNA DEFECT: CREDENTIAL-001 — Credential Exposure Risks
+
+**Severity**: 🟠 HIGH
+
+### Issue #1: API Key Placeholder Format in Documentation
+
+**File**: `shared/AI_RENDER_SETUP.md:54-55`
+
+```markdown
+DREAMSTUDIO_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+STABILITY_API_KEY=sk-yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+```
+
+**Risk**: Pattern `sk-xxx...` matches real Stability AI key format. Could lead to accidental commits.
+
+**Required Fix**:
+```markdown
+DREAMSTUDIO_API_KEY=YOUR_DREAMSTUDIO_KEY_HERE
+STABILITY_API_KEY=YOUR_STABILITY_KEY_HERE
+```
+
+### Issue #2: Credentials Written to Plaintext Config
+
+**File**: `shared/scripts/setup_pod.sh:162-167`
+
+```bash
+cat >> ~/.config/blender/4.0/scripts/addons/AI-Render/config.py << EOF
+DREAMSTUDIO_API_KEY = "${DREAMSTUDIO_API_KEY:-}"
+STABILITY_API_KEY = "${STABILITY_API_KEY:-}"
+EOF
+```
+
+**Risk**: API keys written to plaintext Python file.
+
+### Issue #3: R2 Credentials in SSH Commands
+
+**File**: `shared/scripts/bootstrap_pod.py:124-132`
+
+Credentials transmitted in SSH command payload to configure rclone.
+
+---
+
+## P1 DNA DEFECT: CONFIG-001 — Flask Debug Mode Hardcoded
+
+**Severity**: 🟡 MEDIUM
+**File**: `dashboard/app.py:461`
+
+```python
+app.run(debug=True, host='0.0.0.0', port=5001)
+```
+
+**Risk**: Debug mode exposes Werkzeug debugger with potential code execution.
+
+**Required Fix**:
+```python
+DEBUG = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+app.run(debug=DEBUG, host='0.0.0.0', port=5001)
+```
+
+---
+
+## P1 DNA DEFECT: VALIDATION-001 — Missing Request Schema Validation
+
+**Severity**: 🟡 MEDIUM
+
+### Endpoints Without Validation
+
+| Endpoint | File:Line | Issue |
+|----------|-----------|-------|
+| `POST /api/jobs` | `app.py:152` | No schema validation |
+| `POST /api/pod/id` | `app.py:241` | No format validation |
+| `POST /api/cost/estimate` | `app.py:400` | No bounds checking |
+
+---
+
+## DNA Compliance Checklist
+
+| Requirement | Status | Violations |
+|-------------|--------|------------|
+| No hardcoded user paths | ❌ **FAIL** | 28+ violations |
+| No hardcoded credentials | ⚠️ WARN | Placeholder format issue |
+| All env vars mapped to Doppler | ❌ **FAIL** | 4 vars need mapping |
+| `safe_slug()` implemented | ❌ **FAIL** | Does not exist |
+| `safe_slug()` on all user paths | ❌ **FAIL** | 6 vulnerabilities |
+| Request schema validation | ❌ **FAIL** | 3 endpoints unvalidated |
+| Debug mode configurable | ❌ **FAIL** | Hardcoded `True` |
+
+---
+
+## Remediation Priority
+
+### 🔴 Immediate (P0 — Block Production)
+
+| # | Defect | File | Action |
+|---|--------|------|--------|
+| 1 | SAFE-SLUG-001 | NEW | Create `shared/security.py` with `safe_slug()` |
+| 2 | PATH-TRAVERSAL-001 | `dashboard/app.py` | Add `safe_slug()` to all 6 user input points |
+| 3 | ABSOLUTE-PATH-001 | `bootstrap_pod.py:26` | Replace hardcoded path with env var |
+| 4 | DOPPLER-001 | NEW | Create Doppler config file |
+
+### 🟠 Short-Term (P1 — This Sprint)
+
+| # | Defect | File | Action |
+|---|--------|------|--------|
+| 5 | CONFIG-001 | `dashboard/app.py:461` | Make debug mode configurable |
+| 6 | CREDENTIAL-001 | `AI_RENDER_SETUP.md` | Fix placeholder format |
+| 7 | VALIDATION-001 | `dashboard/app.py` | Add Pydantic request validation |
+| 8 | ABSOLUTE-PATH-002 | Multiple | Add `WORKSPACE_ROOT` env var |
+
+### 🟡 Documentation Cleanup (P2)
+
+| # | Action |
+|---|--------|
+| 9 | Replace all `/Users/eriksjaastad/` with `$PROJECT_ROOT` |
+| 10 | Replace all `~/projects/` with relative paths |
+| 11 | Update SSH examples to use `$SSH_AGENT_QUEUE_PATH` |
+
+---
+
+**END OF DNA SECURITY AUDIT**
+
+*All P0 defects MUST be remediated before production deployment.*
