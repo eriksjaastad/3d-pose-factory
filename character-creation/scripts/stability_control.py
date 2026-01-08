@@ -25,6 +25,10 @@ import sys
 import time
 from pathlib import Path
 
+# Import shared utilities
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "shared"))
+from utils import get_env_var
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Use Stability AI Structure Control")
@@ -48,13 +52,16 @@ def parse_args():
 
 
 def get_api_key(args):
-    """Get API key from args, env, or config file."""
+    """Get API key from args or standardized environment variable lookup."""
     if args.api_key:
         return args.api_key
     
-    if os.environ.get('STABILITY_API_KEY'):
-        return os.environ['STABILITY_API_KEY']
+    # DNA Fix: Use standardized environment variable lookup (Doppler ready)
+    api_key = get_env_var('STABILITY_API_KEY')
+    if api_key:
+        return api_key
     
+    # Legacy fallback for local .env files
     for env_path in [Path('/workspace/.env'), Path('.env')]:
         if env_path.exists():
             for line in env_path.read_text().split('\n'):

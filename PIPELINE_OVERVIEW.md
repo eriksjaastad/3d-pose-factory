@@ -92,7 +92,7 @@ The **Pose Factory Render Agent** is a fully automated pipeline for generating A
 ./ssh_agent/start_agent.sh
 
 # Send commands (in another terminal or from code)
-echo '{"id":"test_cmd","host":"runpod","command":"pwd"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
+echo '{"id":"test_cmd","host":"runpod","command":"pwd"}' >> [SSH_AGENT_QUEUE]/requests.jsonl
 
 # Read results
 tail -1 /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl | jq .
@@ -169,7 +169,7 @@ rclone copy shared/scripts/generate_character_from_cube.py r2_pose_factory:pose-
 
 **3. Run on RunPod (via SSH Agent):**
 ```bash
-echo '{"id":"gen_char_001","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
+echo '{"id":"gen_char_001","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py"}' >> [SSH_AGENT_QUEUE]/requests.jsonl
 ```
 
 **4. Check Results:**
@@ -180,7 +180,7 @@ tail -1 /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl | jq -
 **5. Download Generated Images:**
 ```bash
 # Pod → R2
-echo '{"id":"download_001","host":"runpod","command":"rclone copy /workspace/output/ai-render-*.png r2_pose_factory:pose-factory/output/"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
+echo '{"id":"download_001","host":"runpod","command":"rclone copy /workspace/output/ai-render-*.png r2_pose_factory:pose-factory/output/"}' >> [SSH_AGENT_QUEUE]/requests.jsonl
 
 # R2 → Local
 rclone copy r2_pose_factory:pose-factory/output/ data/output/

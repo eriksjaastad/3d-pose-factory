@@ -92,7 +92,7 @@ rclone ls r2_pose_factory:pose-factory/output/
 
 Download a specific processed batch:
 ```bash
-rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "/Users/eriksjaastad/projects/3D Pose Factory/data/raw/" -v
+rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "[PROJECT_ROOT]/data/raw/" -v
 ```
 
 ---

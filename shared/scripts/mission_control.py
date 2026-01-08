@@ -4,7 +4,7 @@ Mission Control - Unified command center for RunPod operations
 Handles: upload → job dispatch → monitoring → download
 
 USAGE (copy-paste ready):
-    cd /Users/eriksjaastad/projects/3D\ Pose\ Factory
+    cd [PROJECT_ROOT]
     ./shared/scripts/mission_control.py render --wait
 
 Examples:
