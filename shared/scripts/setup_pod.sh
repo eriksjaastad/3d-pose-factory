@@ -39,7 +39,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
 # =============================================================================
 echo "[3/8] Installing Python packages..."
 pip3 install -q --upgrade pip
-pip3 install -q opencv-python mediapipe pillow numpy requests
+pip3 install -q opencv-python==4.8.1.78 mediapipe==0.10.8 pillow==10.1.0 numpy==1.26.2 requests==2.31.0
 
 # =============================================================================
 # Phase 3: Create standardized directory layout

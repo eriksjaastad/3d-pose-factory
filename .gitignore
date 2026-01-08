@@ -30,3 +30,4 @@ ops_queue/
 .vscode/
 character-creation/scripts/.pod_id
 pose-rendering/scripts/.pod_id
+repomix-output.xml

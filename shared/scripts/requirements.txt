@@ -2,11 +2,7 @@
 # Install with: pip install -r requirements.txt
 
 # For future sync script enhancements
-boto3>=1.34.0  # AWS S3/R2 API access (alternative to rclone)
-
-# For image processing and validation
-Pillow>=10.0.0
-
-# For configuration management
-PyYAML>=6.0
+boto3==1.34.0  # AWS S3/R2 API access (pinned for baseline)
+Pillow==10.1.0  # Pinned for baseline
+PyYAML==6.0.1   # Pinned for baseline
 
