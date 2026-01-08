@@ -62,7 +62,7 @@ rclone copy "/path/to/your/images/" r2_pose_factory:pose-factory/input/ -v
 
 **Example:**
 ```bash
-rclone copy "/Users/eriksjaastad/Desktop/my-poses/" r2_pose_factory:pose-factory/input/ -v
+rclone copy "${PROJECTS_ROOT}/Desktop/my-poses/" r2_pose_factory:pose-factory/input/ -v
 ```
 
 ---
@@ -92,7 +92,7 @@ rclone ls r2_pose_factory:pose-factory/output/
 
 Download a specific processed batch:
 ```bash
-rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "/Users/eriksjaastad/projects/3D Pose Factory/data/raw/" -v
+rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "${PROJECTS_ROOT}/3D Pose Factory/data/raw/" -v
 ```
 
 ---

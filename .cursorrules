@@ -75,7 +75,7 @@
 - RunPod pods via SSH (automated via ssh_agent)
 - Credentials in `~/.ssh/config`
 
-**Tracked in:** `/Users/eriksjaastad/projects/project-scaffolding/EXTERNAL_RESOURCES.md`
+**Tracked in:** `${PROJECTS_ROOT}/project-scaffolding/EXTERNAL_RESOURCES.md`
 
 ---
 
@@ -128,7 +128,7 @@ python mission_control.py download --job JOB_ID
 
 ## Related Documentation
 
-- **Project Philosophy:** `/Users/eriksjaastad/projects/Trading Projects/PROJECT_PHILOSOPHY.md`
-- **Project Scaffolding:** `/Users/eriksjaastad/projects/project-scaffolding/`
+- **Project Philosophy:** `${PROJECTS_ROOT}/Trading Projects/PROJECT_PHILOSOPHY.md`
+- **Project Scaffolding:** `${PROJECTS_ROOT}/project-scaffolding/`
 - **Dashboard:** `dashboard/README.md`
 

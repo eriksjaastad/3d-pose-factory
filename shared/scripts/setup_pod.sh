@@ -15,7 +15,7 @@
 # This script is IDEMPOTENT - safe to re-run any time.
 ###############################################################################
 
-set -e  # Exit on error
+set -euo pipefail  # Exit on error, undefined vars, and pipe failures
 
 echo "========================================"
 echo "  3D Pose Factory - Pod Setup v2.0"
@@ -179,7 +179,7 @@ fi
 echo "[8/8] Running smoke tests..."
 
 # Test 1: Blender version
-BLENDER_VERSION=$(blender --version 2>/dev/null | head -n1 || echo "FAILED")
+BLENDER_VERSION="$(blender --version 2>/dev/null | head -n1 || echo "FAILED")"
 if [[ "$BLENDER_VERSION" == *"Blender"* ]]; then
     echo "   ✅ Blender: $BLENDER_VERSION"
 else
@@ -187,7 +187,7 @@ else
 fi
 
 # Test 2: Blender Python
-BLENDER_PYTHON_TEST=$(blender --background --python-expr "import bpy; print('BLENDER_PYTHON_OK')" 2>&1 | grep -c "BLENDER_PYTHON_OK" || echo "0")
+BLENDER_PYTHON_TEST="$(blender --background --python-expr "import bpy; print('BLENDER_PYTHON_OK')" 2>&1 | grep -c "BLENDER_PYTHON_OK" || echo "0")"
 if [ "$BLENDER_PYTHON_TEST" -gt 0 ]; then
     echo "   ✅ Blender Python: Working"
 else
@@ -196,14 +196,14 @@ fi
 
 # Test 3: GPU (optional)
 if command -v nvidia-smi &> /dev/null; then
-    GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -n1 || echo "Unknown")
+    GPU_NAME="$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -n1 || echo "Unknown")"
     echo "   ✅ GPU: $GPU_NAME"
 else
     echo "   ⚠️  GPU: nvidia-smi not found"
 fi
 
 # Test 4: R2 connection
-R2_TEST=$(rclone lsd r2_pose_factory:pose-factory 2>/dev/null | wc -l || echo "0")
+R2_TEST="$(rclone lsd r2_pose_factory:pose-factory 2>/dev/null | wc -l || echo "0")"
 if [ "$R2_TEST" -gt 0 ]; then
     echo "   ✅ R2: Connected ($R2_TEST directories)"
 else
@@ -220,7 +220,7 @@ echo ""
 read -p "Start Pod Agent for automatic job processing? [y/N] " -n 1 -r -t 5 || REPLY="n"
 echo ""
 
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     # Download latest pod agent
     rclone copy r2_pose_factory:pose-factory/shared/scripts/pod_agent.sh /workspace/ 2>/dev/null || true
     chmod +x /workspace/pod_agent.sh 2>/dev/null || true

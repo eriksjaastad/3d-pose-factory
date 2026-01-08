@@ -2,7 +2,7 @@
 # Auto-run script for 3D Pose Factory
 # This script runs automatically when the pod starts
 
-set -e  # Exit on any error
+set -euo pipefail  # Exit on error, undefined vars, and pipe failures
 
 echo "================================"
 echo "3D Pose Factory - Auto Processing"
@@ -15,7 +15,7 @@ cd /workspace/pose-factory
 # Step 1: Download inputs from R2
 echo "[1/5] Downloading inputs from R2..."
 rclone sync r2_pose_factory:pose-factory/input/ ./input/ -v
-INPUT_COUNT=$(ls -1 input/*.{jpg,jpeg,png} 2>/dev/null | wc -l)
+INPUT_COUNT="$(ls -1 input/*.{jpg,jpeg,png} 2>/dev/null | wc -l)"
 echo "Found $INPUT_COUNT images to process"
 
 if [ "$INPUT_COUNT" -eq 0 ]; then
@@ -29,7 +29,7 @@ python3 batch_process.py
 
 # Step 3: Upload results to R2
 echo "[3/5] Uploading results to R2..."
-rclone copy ./output/poses/ r2_pose_factory:pose-factory/output/processed-$(date +%Y%m%d-%H%M%S)/ -v
+rclone copy ./output/poses/ r2_pose_factory:pose-factory/output/processed-"$(date +%Y%m%d-%H%M%S)"/ -v
 
 # Step 4: Clean up processed files
 echo "[4/5] Cleaning up..."

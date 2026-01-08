@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 ###############################################################################
 # Pod Agent - RunPod-side job executor
 # 
@@ -15,8 +16,6 @@
 #   ./pod_agent.sh &        # Run in background
 #   nohup ./pod_agent.sh &  # Run in background, persist after logout
 ###############################################################################
-
-set -e
 
 # Configuration
 R2_REMOTE="r2_pose_factory:pose-factory"
@@ -87,9 +86,9 @@ execute_render_job() {
     local job_id="$2"
     
     # Parse manifest
-    local script=$(jq -r '.params.script' "$manifest_file")
-    local characters=$(jq -r '.params.characters // [] | join(",")' "$manifest_file")
-    local output_dir=$(jq -r '.params.output_dir' "$manifest_file")
+    local script="$(jq -r '.params.script' "$manifest_file")"
+    local characters="$(jq -r '.params.characters // [] | join(",")' "$manifest_file")"
+    local output_dir="$(jq -r '.params.output_dir' "$manifest_file")"
     
     log "Executing render job:"
     log "  Script: $script"
@@ -97,13 +96,13 @@ execute_render_job() {
     log "  Output: $output_dir"
     
     # Download script if needed
-    local script_dir=$(dirname "$script")
+    local script_dir="$(dirname "$script")"
     mkdir -p "$WORKSPACE/$script_dir"
     rclone copy "$R2_REMOTE/$script_dir/" "$WORKSPACE/$script_dir/" --progress
     
     # Download FBX files
     mkdir -p "$WORKSPACE/downloads"
-    if [ ! "$(ls -A $WORKSPACE/downloads/*.fbx 2>/dev/null)" ]; then
+    if [ ! "$(ls -A "$WORKSPACE"/downloads/*.fbx 2>/dev/null)" ]; then
         log "Downloading FBX files..."
         rclone copy "$R2_REMOTE/downloads/" "$WORKSPACE/downloads/" --include "*.fbx" --progress
     fi
@@ -134,14 +133,14 @@ execute_character_job() {
     local job_id="$2"
     
     # Parse manifest
-    local script=$(jq -r '.params.script' "$manifest_file")
-    local params=$(jq -r '.params.character_params // {}' "$manifest_file")
+    local script="$(jq -r '.params.script' "$manifest_file")"
+    local params="$(jq -r '.params.character_params // {}' "$manifest_file")"
     
     log "Executing character creation job:"
     log "  Script: $script"
     
     # Download script
-    local script_dir=$(dirname "$script")
+    local script_dir="$(dirname "$script")"
     mkdir -p "$WORKSPACE/$script_dir"
     rclone copy "$R2_REMOTE/$script_dir/" "$WORKSPACE/$script_dir/" --progress
     
@@ -160,8 +159,8 @@ execute_job() {
     local manifest_file="$1"
     
     # Parse job type and ID
-    local job_type=$(jq -r '.job_type' "$manifest_file")
-    local job_id=$(jq -r '.job_id' "$manifest_file")
+    local job_type="$(jq -r '.job_type' "$manifest_file")"
+    local job_id="$(jq -r '.job_id' "$manifest_file")"
     
     log "🚀 Starting job: $job_id (type: $job_type)"
     
@@ -204,15 +203,15 @@ main() {
     # Main loop
     while true; do
         # Find pending jobs
-        pending_jobs=$(find_pending_jobs)
+        pending_jobs="$(find_pending_jobs)"
         
         if [ -n "$pending_jobs" ]; then
             # Process first job found
-            job_file=$(echo "$pending_jobs" | head -n 1)
+            job_file="$(echo "$pending_jobs" | head -n 1)"
             log "📋 Found pending job: $job_file"
             
             # Download job manifest
-            manifest_file=$(download_job "$job_file")
+            manifest_file="$(download_job "$job_file")"
             
             # Move to processing in R2
             move_to_processing "$job_file"
@@ -229,7 +228,7 @@ main() {
         fi
         
         # Wait before next poll
-        sleep $POLL_INTERVAL
+        sleep "$POLL_INTERVAL"
     done
 }
 

@@ -12,7 +12,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "[local] Connecting to RunPod and running setup_runpod_pod.sh..."
-${RUNPOD_3D_POSE_SSH} 'bash -s' < "${SCRIPT_DIR}/setup_runpod_pod.sh"
+"${RUNPOD_3D_POSE_SSH}" 'bash -s' < "${SCRIPT_DIR}/setup_runpod_pod.sh"
 
 echo "[local] Setup script finished on pod."
 

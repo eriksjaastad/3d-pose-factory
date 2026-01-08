@@ -24,6 +24,11 @@ import os
 import math
 import random
 import json
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def parse_args():
@@ -213,8 +218,9 @@ def setup_render_settings(resolution, samples):
         if prefs:
             prefs.preferences.compute_device_type = 'CUDA'
             scene.cycles.device = 'GPU'
-    except:
-        pass
+    except Exception as e:
+        # DNA Fix: Log GPU setup error
+        logger.warning(f"Could not enable GPU rendering: {e}")
 
 
 def main():

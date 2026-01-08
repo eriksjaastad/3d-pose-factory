@@ -4,12 +4,12 @@ Mission Control Dashboard - Flask Backend
 Provides web UI for managing RunPod jobs
 
 USAGE (copy-paste ready):
-    cd /Users/eriksjaastad/projects/3D\ Pose\ Factory/dashboard
+    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
     source venv/bin/activate
     python3 app.py
 
 First time setup:
-    cd /Users/eriksjaastad/projects/3D\ Pose\ Factory/dashboard
+    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
     python3 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
@@ -33,15 +33,20 @@ import time
 from dotenv import load_dotenv
 import runpod
 
+# Import shared utilities
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent / "shared"))
+from utils import get_env_var, safe_slug
+
 # Load environment variables
 load_dotenv()
 
 # Configure RunPod
-runpod.api_key = os.getenv('RUNPOD_API_KEY')
+runpod.api_key = get_env_var('RUNPOD_API_KEY')
 
 # Add parent directory to path to import mission_control and cost_calculator
 sys.path.insert(0, str(Path(__file__).parent.parent / "shared" / "scripts"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "shared"))
 
 from cost_calculator import CostCalculator
 
@@ -181,6 +186,8 @@ def submit_job():
 @app.route('/api/jobs/<job_id>', methods=['GET'])
 def get_job(job_id):
     """Get details for a specific job"""
+    # DNA Fix: Sanitize input to prevent path traversal
+    job_id = safe_slug(job_id)
     manifest_file = PROJECT_ROOT / "data" / "jobs" / f"{job_id}.json"
     
     if not manifest_file.exists():
@@ -197,6 +204,8 @@ def get_job(job_id):
 @app.route('/api/jobs/<job_id>/download', methods=['POST'])
 def download_job(job_id):
     """Download job results from R2"""
+    # DNA Fix: Sanitize input to prevent path traversal
+    job_id = safe_slug(job_id)
     # Check if completed
     status = get_job_status(job_id)
     if status != "completed":

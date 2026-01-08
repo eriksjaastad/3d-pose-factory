@@ -267,7 +267,9 @@ def inspect_ai_render_addon():
                     if not sub_op.startswith('_'):
                         full_name = f"bpy.ops.{op_name}.{sub_op}"
                         ai_render_ops.append(full_name)
-            except:
+            except Exception as e:
+                # DNA Fix: Silent failure replaced with logging (likely non-accessible operator)
+                # print(f"      ⚠️  Error inspecting operator {op_name}: {e}")
                 pass
     
     if ai_render_ops:

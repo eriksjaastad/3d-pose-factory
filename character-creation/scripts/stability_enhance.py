@@ -19,11 +19,20 @@ Usage:
 import argparse
 import base64
 import glob
+import logging
 import os
 import requests
 import sys
 import time
 from pathlib import Path
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+
+# Import shared utilities
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "shared"))
+from utils import get_env_var
 
 
 def parse_args():
@@ -48,13 +57,16 @@ def parse_args():
 
 
 def get_api_key(args):
-    """Get API key from args, env, or config file."""
+    """Get API key from args or standardized environment variable lookup."""
     if args.api_key:
         return args.api_key
     
-    if os.environ.get('STABILITY_API_KEY'):
-        return os.environ['STABILITY_API_KEY']
+    # DNA Fix: Use standardized environment variable lookup (Doppler ready)
+    api_key = get_env_var('STABILITY_API_KEY')
+    if api_key:
+        return api_key
     
+    # Legacy fallback for local .env files
     for env_path in [Path('/workspace/.env'), Path('.env')]:
         if env_path.exists():
             for line in env_path.read_text().split('\n'):
@@ -106,7 +118,9 @@ def call_structure_control_api(api_key, image_path, prompt, negative_prompt, con
         try:
             error_json = response.json()
             error_msg = error_json.get('message', error_json.get('errors', response.text))
-        except:
+        except Exception as e:
+            # DNA Fix: Log parsing error instead of silent failure
+            logger.warning(f"Could not parse error JSON: {e}")
             pass
         raise Exception(f"API error {response.status_code}: {error_msg}")
     
@@ -152,7 +166,9 @@ def call_sketch_control_api(api_key, image_path, prompt, negative_prompt, contro
         try:
             error_json = response.json()
             error_msg = error_json.get('message', error_json.get('errors', response.text))
-        except:
+        except Exception as e:
+            # DNA Fix: Log parsing error instead of silent failure
+            logger.warning(f"Could not parse error JSON: {e}")
             pass
         raise Exception(f"API error {response.status_code}: {error_msg}")
     
