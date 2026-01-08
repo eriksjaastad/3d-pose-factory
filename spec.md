@@ -1189,3 +1189,431 @@ app.run(debug=DEBUG, host='0.0.0.0', port=5001)
 **END OF DNA SECURITY AUDIT**
 
 *All P0 defects MUST be remediated before production deployment.*
+
+---
+
+# PART 3: RESILIENCE & PROFESSIONAL HYGIENE AUDIT
+
+**Audit Date**: 2026-01-08
+**Standard**: Gold Standard Professional Hygiene
+**Status**: ⚠️ MULTIPLE DEFECTS FOUND
+
+---
+
+## Resilience Summary
+
+| Category | Count | Severity |
+|----------|-------|----------|
+| Silent Exception Swallowing (`except: pass`) | 5 | **P0 CRITICAL** |
+| Broad Exception Handlers | 20+ | **P1 HIGH** |
+| Unpinned Dependencies | 0 | ✅ COMPLIANT |
+| Magic Numbers (Unconfigured Constants) | 35+ | **P1 HIGH** |
+| Shell Script Safety Issues | 12+ | **P1 HIGH** |
+
+---
+
+## P0 DEFECT: EXCEPT-PASS-001 — Silent Exception Swallowing
+
+**Severity**: 🔴 CRITICAL
+**Standard Violation**: All exceptions must be logged, never silently swallowed.
+
+### Violations Found
+
+| File | Line | Context |
+|------|------|---------|
+| `shared/test_ai_render.py` | 270-271 | `except: pass` |
+| `character-creation/scripts/stability_enhance.py` | 109-110 | `except: pass` |
+| `character-creation/scripts/stability_enhance.py` | 155-156 | `except: pass` |
+| `character-creation/scripts/render_variations.py` | 216-217 | `except: pass` |
+| `character-creation/scripts/ai_enhance_batch.py` | 56-57 | `except: pass` (addon enable) |
+
+### Example Violation
+
+```python
+# stability_enhance.py:109-110 — SILENT FAILURE
+try:
+    error = response.json()
+except:
+    pass  # ❌ Error details lost forever
+```
+
+### Required Fix
+
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+
+try:
+    error = response.json()
+except Exception as e:
+    logger.warning(f"Could not parse error response: {e}")
+```
+
+---
+
+## P1 DEFECT: BROAD-EXCEPT-001 — Overly Broad Exception Handlers
+
+**Severity**: 🟠 HIGH
+**Standard**: Catch specific exceptions, log context, don't expose internals to users.
+
+### High-Risk Patterns Found
+
+| File | Line | Issue |
+|------|------|-------|
+| `dashboard/app.py` | 288, 308, 337, 362-394, 428 | `except Exception as e: return jsonify({"error": str(e)})` |
+| `pose-rendering/scripts/render_simple_working.py` | 126-127 | `except Exception as e: print; continue` |
+| `pose-rendering/scripts/render_multi_angle.py` | 205-207 | `except Exception as e: print; continue` |
+| `shared/scripts/bootstrap_pod.py` | 119-121 | `except Exception as e: print; return` |
+
+### Dashboard API Exposure Risk
+
+```python
+# dashboard/app.py:288 — INFORMATION LEAKAGE
+except Exception as e:
+    return jsonify({"error": str(e)}), 500  # ❌ Exposes internal errors to client
+```
+
+**Risk**: Stack traces, file paths, and internal state can leak to API consumers.
+
+### Required Fix
+
+```python
+import logging
+from werkzeug.exceptions import HTTPException
+
+logger = logging.getLogger(__name__)
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    if isinstance(e, HTTPException):
+        return jsonify({"error": e.description}), e.code
+
+    # Log the actual error
+    logger.exception("Unhandled exception in API")
+
+    # Return generic message to client
+    return jsonify({"error": "Internal server error"}), 500
+```
+
+---
+
+## ✅ COMPLIANT: DEPENDENCY-001 — Requirements Pinning
+
+**Status**: PASS
+
+### dashboard/requirements.txt
+
+```
+Flask==3.0.0          ✅ Pinned
+flask-cors==4.0.0     ✅ Pinned
+python-dotenv==1.0.0  ✅ Pinned
+runpod==1.5.1         ✅ Pinned
+PyYAML==6.0.1         ✅ Pinned
+pytest==7.4.3         ✅ Pinned
+```
+
+### shared/scripts/requirements.txt
+
+```
+boto3==1.34.0    ✅ Pinned
+Pillow==10.1.0   ✅ Pinned
+PyYAML==6.0.1    ✅ Pinned
+```
+
+### setup_pod.sh (Line 42)
+
+```bash
+pip3 install -q opencv-python==4.8.1.78 mediapipe==0.10.8 pillow==10.1.0 numpy==1.26.2 requests==2.31.0
+```
+
+✅ All dependencies properly pinned with `==`.
+
+---
+
+## P1 DEFECT: MAGIC-NUMBERS-001 — Unconfigured Constants
+
+**Severity**: 🟠 HIGH
+**Standard**: All constants must be in config files or Doppler, not hardcoded.
+
+### Render Constants (Should be in config.yaml)
+
+| File | Line | Constant | Value |
+|------|------|----------|-------|
+| `render_simple_working.py` | 40-41 | Resolution | `512x512` |
+| `render_simple_working.py` | 70 | Camera distance | `3.5` |
+| `render_simple_working.py` | 71 | Camera height | `1.6` |
+| `render_simple_working.py` | 36 | Sun energy | `3.0` |
+| `render_multi_angle.py` | 82-83 | Resolution | `512x512` |
+| `render_multi_angle.py` | 71 | Sun energy | `2.0` |
+| `render_multi_angle.py` | 77 | Fill energy | `1.0` |
+| `blender_camera_utils.py` | 125-127 | Camera angle, padding, FOV | `45.0`, `1.2`, `50.0` |
+
+### AI/API Constants
+
+| File | Line | Constant | Value |
+|------|------|----------|-------|
+| `generate_character_from_cube.py` | 30 | Resolution | `(1024, 1024)` |
+| `generate_character_from_cube.py` | 31-33 | Steps, CFG, Seed | `20`, `7.0`, `42` |
+| `ai_enhance_batch.py` | 82-83 | Resolution | `1024x1024` |
+| `ai_enhance_batch.py` | 91 | CFG scale | `7.0` |
+| `stability_control.py` | 168 | Seed formula | `42 + i * 1000` |
+
+### Infrastructure Constants
+
+| File | Line | Constant | Value |
+|------|------|----------|-------|
+| `pod_agent.sh` | 26 | Poll interval | `30` seconds |
+| `mission_control.py` | 126 | Job timeout | `3600` seconds |
+| `bootstrap_pod.py` | 63, 178 | SSH timeout | `300` seconds |
+| `dashboard/app.py` | 272 | Volume size | `100` GB |
+| `dashboard/app.py` | 461 | Port | `5001` |
+
+### Mesh Processing Constants
+
+| File | Line | Constant | Value |
+|------|------|----------|-------|
+| `mesh_cleanup_proximity.py` | 32-38 | Voxel, smooth, shrink | `0.0075`, `0.2`, `0.004`, etc. |
+| `mesh_cleanup_smooth_and_separate.py` | 43-47 | Same | `0.0075`, `0.2`, `0.008`, etc. |
+| `separate_clothing.py` | 45, 57, 68, 80 | Same | Various defaults |
+
+### Required Fix: Create Constants Config
+
+```yaml
+# config/render_constants.yaml (NEW FILE)
+render:
+  resolution:
+    width: 512
+    height: 512
+  camera:
+    distance: 3.5
+    height: 1.6
+    fov: 50.0
+    padding_factor: 1.2
+  lighting:
+    sun_energy: 3.0
+    fill_energy: 1.0
+
+ai:
+  sdxl:
+    resolution: [1024, 1024]
+    steps: 20
+    cfg_scale: 7.0
+    default_seed: 42
+
+infrastructure:
+  pod_agent_poll_interval: 30
+  job_timeout: 3600
+  ssh_timeout: 300
+  dashboard_port: 5001
+```
+
+---
+
+## P1 DEFECT: SHELL-SAFETY-001 — Shell Script Safety Issues
+
+**Severity**: 🟠 HIGH
+**Standard**: All shell scripts must handle spaces in filenames and check errors.
+
+### Issue #1: Unquoted Variables with Spaces
+
+**File**: `pose-rendering/scripts/render_pipeline.sh:18, 72-74, 107, 122`
+
+```bash
+# VULNERABLE: Path with spaces will break
+PROJECT_DIR="$HOME/projects/3D Pose Factory"  # OK - quoted definition
+cd "$PROJECT_DIR"                              # OK - quoted usage
+
+# But then:
+rclone copy scripts/render_simple_working.py "$R2_REMOTE/scripts/" -v  # ❌ scripts/ unquoted
+OUTPUT_DIR="data/working/renders_$TIMESTAMP"
+mkdir -p "$OUTPUT_DIR"                         # OK
+open "$OUTPUT_DIR"                             # OK
+```
+
+### Issue #2: Missing `set -u` (Unset Variable Check)
+
+**Files**: All shell scripts
+
+```bash
+# Current:
+set -e  # Exit on error
+
+# Should be:
+set -eu  # Exit on error OR unset variable
+# Or even better:
+set -euo pipefail  # Also catch pipe failures
+```
+
+### Issue #3: Unquoted Glob Expansion
+
+**File**: `shared/scripts/pod_agent.sh:106`
+
+```bash
+# VULNERABLE: If no .fbx files, glob expands literally
+if [ ! "$(ls -A $WORKSPACE/downloads/*.fbx 2>/dev/null)" ]; then
+#              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unquoted glob
+```
+
+**Fix**:
+```bash
+if [ ! "$(ls -A "$WORKSPACE/downloads/"*.fbx 2>/dev/null)" ]; then
+```
+
+### Issue #4: Word Splitting on Variables
+
+**File**: `shared/scripts/pod_agent.sh:115-118`
+
+```bash
+# VULNERABLE: $characters may contain spaces
+blender --background --python "$WORKSPACE/$script" -- --characters "$characters" --output "$output_dir"
+#                                                                  ^^^^^^^^^^^^
+# If characters="X Bot,Y Bot", this becomes --characters "X Bot,Y Bot" (OK)
+# But if it contained only "X Bot", word splitting could occur
+```
+
+### Issue #5: Missing Error Handling in Conditional
+
+**File**: `shared/scripts/setup_pod.sh:220`
+
+```bash
+read -p "Start Pod Agent...? [y/N] " -n 1 -r -t 5 || REPLY="n"
+#                                              ^^^^ Good! Has fallback
+```
+
+✅ This one is actually correct.
+
+### Issue #6: Command Substitution Error Handling
+
+**File**: `shared/scripts/setup_pod.sh:182`
+
+```bash
+BLENDER_VERSION=$(blender --version 2>/dev/null | head -n1 || echo "FAILED")
+#                                                           ^^^^^^^^^^^^^^^^ Good!
+```
+
+✅ This one handles errors correctly.
+
+### Required Fixes
+
+```bash
+# 1. Add strict mode to all scripts
+#!/bin/bash
+set -euo pipefail
+
+# 2. Quote all variable expansions
+cd "${PROJECT_DIR}"
+mkdir -p "${OUTPUT_DIR}"
+
+# 3. Use arrays for commands with multiple arguments
+BLENDER_CMD=(blender --background --python "${WORKSPACE}/${script}")
+"${BLENDER_CMD[@]}" -- --output "${output_dir}"
+
+# 4. Check for empty globs
+shopt -s nullglob
+fbx_files=("${WORKSPACE}/downloads/"*.fbx)
+if [[ ${#fbx_files[@]} -eq 0 ]]; then
+    echo "No FBX files found"
+fi
+```
+
+---
+
+## P1 DEFECT: SHELL-SAFETY-002 — Hardcoded Paths in Shell Scripts
+
+**Severity**: 🟠 HIGH
+
+### Violations
+
+| File | Line | Path |
+|------|------|------|
+| `render_pipeline.sh` | 18 | `$HOME/projects/3D Pose Factory` |
+| `render_pipeline.sh` | 22 | `$HOME/.ssh/id_ed25519` |
+| `upload_to_r2.sh` | 43 | `ssh to6i4tul7p9hk2-644113d9@ssh.runpod.io` (hardcoded pod ID!) |
+| `bootstrap_fresh_pod.sh` | 25-27 | Placeholder credentials |
+
+### Example
+
+```bash
+# upload_to_r2.sh:43 — HARDCODED POD ID
+echo "ssh to6i4tul7p9hk2-644113d9@ssh.runpod.io -i ~/.ssh/id_ed25519"
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ This is a specific pod instance!
+```
+
+---
+
+## P2 DEFECT: LOGGING-001 — Inconsistent Logging
+
+**Severity**: 🟡 MEDIUM
+
+### Current State
+
+- **Dashboard**: Uses `print()` statements
+- **Scripts**: Mix of `print()` and emoji-prefixed output
+- **Shell**: Uses color codes via echo
+- **No centralized logging configuration**
+
+### Required: Unified Logging Setup
+
+```python
+# shared/logging_config.py (NEW FILE)
+import logging
+import sys
+
+def setup_logging(name: str, level: str = "INFO") -> logging.Logger:
+    logger = logging.getLogger(name)
+    logger.setLevel(getattr(logging, level.upper()))
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    ))
+    logger.addHandler(handler)
+
+    return logger
+```
+
+---
+
+## Resilience Compliance Checklist
+
+| Requirement | Status | Notes |
+|-------------|--------|-------|
+| No `except: pass` | ❌ **FAIL** | 5 violations |
+| Specific exception handling | ❌ **FAIL** | 20+ broad handlers |
+| Dependencies pinned with `==` | ✅ **PASS** | All pinned |
+| No magic numbers | ❌ **FAIL** | 35+ violations |
+| Shell scripts use `set -euo pipefail` | ❌ **FAIL** | Only `set -e` |
+| All variables quoted | ❌ **FAIL** | Multiple unquoted |
+| Centralized logging | ❌ **FAIL** | Uses print() |
+
+---
+
+## Remediation Priority
+
+### 🔴 Immediate (P0)
+
+| # | Defect | File | Action |
+|---|--------|------|--------|
+| 1 | EXCEPT-PASS-001 | 5 files | Replace `except: pass` with logging |
+
+### 🟠 Short-Term (P1)
+
+| # | Defect | Files | Action |
+|---|--------|-------|--------|
+| 2 | BROAD-EXCEPT-001 | `dashboard/app.py` | Add global error handler, don't expose `str(e)` |
+| 3 | MAGIC-NUMBERS-001 | Multiple | Create `render_constants.yaml`, refactor |
+| 4 | SHELL-SAFETY-001 | All `.sh` | Add `set -euo pipefail`, quote variables |
+| 5 | SHELL-SAFETY-002 | `upload_to_r2.sh` | Remove hardcoded pod ID |
+
+### 🟡 Medium-Term (P2)
+
+| # | Defect | Action |
+|---|--------|--------|
+| 6 | LOGGING-001 | Create `shared/logging_config.py`, migrate from `print()` |
+
+---
+
+**END OF RESILIENCE & HYGIENE AUDIT**
+
+*P0 defects block deployment. P1 defects should be addressed this sprint.*
