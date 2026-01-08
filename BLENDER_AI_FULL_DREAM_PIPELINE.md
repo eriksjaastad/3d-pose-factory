@@ -101,8 +101,8 @@ Using the SSH agent + RunPod + Claude-in-Cursor:
   5. Adjust scripts and repeat.
 
 - The SSH agent provides a **controlled interface** for AI to run these commands on RunPod:
-  - Requests go into `ops_queue/requests.jsonl`.
-  - Results come back via `ops_queue/results.jsonl`.
+  - Requests go into `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl`.
+  - Results come back via `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl`.
   - AI reads outputs, reasons about them, and decides the next command or code change.
 
 **Goal of this step:** Make the whole system **self-service for AI**: you specify the creative direction and constraints, and the AI iteratively updates Blender scenes + image generation until the outputs match your intent.

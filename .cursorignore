@@ -1,0 +1,26 @@
+# .cursorignore - 3D Pose Factory
+
+# Dependencies
+venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# Rendered Images (THOUSANDS of PNG files)
+output/
+
+# 3D Model Files (Large binaries)
+*.blend
+*.fbx
+*.obj
+
+# Logs
+*.log
+logs/
+
+# OS Files
+.DS_Store
+
+# Git
+.git/
+

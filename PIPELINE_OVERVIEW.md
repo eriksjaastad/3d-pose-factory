@@ -64,15 +64,15 @@ The **Pose Factory Render Agent** is a fully automated pipeline for generating A
 
 ## 🔧 Components
 
-### 1. SSH Agent (`ssh_agent/agent.py`)
+### 1. SSH Agent (`_tools/ssh_agent/agent.py`)
 
 **Purpose:** Execute commands on RunPod without manual SSH interaction.
 
 **How It Works:**
-- Watches `ops_queue/requests.jsonl` for new commands
+- Watches `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl` for new commands
 - Maintains a **persistent interactive SSH shell** using `pexpect`
 - Executes commands and captures output + exit codes
-- Writes results to `ops_queue/results.jsonl`
+- Writes results to `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl`
 
 **Why We Need It:**
 - RunPod's SSH doesn't support direct command execution (`ssh user@host command`)
@@ -80,11 +80,11 @@ The **Pose Factory Render Agent** is a fully automated pipeline for generating A
 - Solution: `pexpect` maintains a live shell and "types" commands into it
 
 **Key Files:**
-- `ssh_agent/agent.py` - Main agent code
-- `ssh_agent/ssh_hosts.yaml` - Host configurations
-- `ssh_agent/start_agent.sh` - Startup script
-- `ops_queue/requests.jsonl` - Command queue (input)
-- `ops_queue/results.jsonl` - Results log (output)
+- `_tools/ssh_agent/agent.py` - Main agent code
+- `_tools/ssh_agent/ssh_hosts.yaml` - Host configurations
+- `_tools/ssh_agent/start_agent.sh` - Startup script
+- `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl` - Command queue (input)
+- `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl` - Results log (output)
 
 **Usage:**
 ```bash
@@ -92,10 +92,10 @@ The **Pose Factory Render Agent** is a fully automated pipeline for generating A
 ./ssh_agent/start_agent.sh
 
 # Send commands (in another terminal or from code)
-echo '{"id":"test_cmd","host":"runpod","command":"pwd"}' >> ops_queue/requests.jsonl
+echo '{"id":"test_cmd","host":"runpod","command":"pwd"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 
 # Read results
-tail -1 ops_queue/results.jsonl | jq .
+tail -1 /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl | jq .
 ```
 
 ### 2. AI Render Plugin
@@ -158,8 +158,8 @@ if render_result and not render_result.has_data:
 
 **1. Start SSH Agent (once per session):**
 ```bash
-cd "/Users/eriksjaastad/projects/3D Pose Factory"
-./ssh_agent/start_agent.sh
+cd /Users/eriksjaastad/projects/_tools/ssh_agent
+./start_agent.sh
 ```
 
 **2. Upload Golden Script to R2:**
@@ -169,18 +169,18 @@ rclone copy shared/scripts/generate_character_from_cube.py r2_pose_factory:pose-
 
 **3. Run on RunPod (via SSH Agent):**
 ```bash
-echo '{"id":"gen_char_001","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py"}' >> ops_queue/requests.jsonl
+echo '{"id":"gen_char_001","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 ```
 
 **4. Check Results:**
 ```bash
-tail -1 ops_queue/results.jsonl | jq -r '.stdout'
+tail -1 /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl | jq -r '.stdout'
 ```
 
 **5. Download Generated Images:**
 ```bash
 # Pod → R2
-echo '{"id":"download_001","host":"runpod","command":"rclone copy /workspace/output/ai-render-*.png r2_pose_factory:pose-factory/output/"}' >> ops_queue/requests.jsonl
+echo '{"id":"download_001","host":"runpod","command":"rclone copy /workspace/output/ai-render-*.png r2_pose_factory:pose-factory/output/"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 
 # R2 → Local
 rclone copy r2_pose_factory:pose-factory/output/ data/output/
@@ -228,12 +228,12 @@ rclone copy r2_pose_factory:pose-factory/output/ data/output/
 
 ```
 3D Pose Factory/
-├── ssh_agent/                # Automated SSH command execution
+├── _tools/ssh_agent/          # Automated SSH command execution (central)
 │   ├── agent.py             # Main agent (pexpect-based)
 │   ├── ssh_hosts.yaml       # Host configurations
 │   └── start_agent.sh       # Startup script
 │
-├── ops_queue/               # Command queue (gitignored)
+├── _tools/ssh_agent/queue/    # Command queue (central)
 │   ├── requests.jsonl       # Input: commands to execute
 │   └── results.jsonl        # Output: command results
 │

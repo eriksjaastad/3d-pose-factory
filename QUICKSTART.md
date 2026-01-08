@@ -30,7 +30,8 @@
 
 ```bash
 cd "/Users/eriksjaastad/projects/3D Pose Factory"
-./ssh_agent/start_agent.sh
+cd /Users/eriksjaastad/projects/_tools/ssh_agent
+./start_agent.sh
 ```
 
 **Leave this running in a terminal.**
@@ -47,10 +48,10 @@ In a new terminal:
 cd "/Users/eriksjaastad/projects/3D Pose Factory"
 
 # Queue the command
-echo '{"id":"generate-'$(date +%s)'","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py 2>&1 | tail -50"}' >> ops_queue/requests.jsonl
+echo '{"id":"generate-'$(date +%s)'","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py 2>&1 | tail -50"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 
 # Watch the results (in real-time)
-tail -f ops_queue/results.jsonl
+tail -f /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl
 ```
 
 **Option B: Manual SSH (if agent isn't running)**
@@ -72,17 +73,17 @@ blender --background --python scripts/generate_character_from_cube.py
 **Check what was generated:**
 
 ```bash
-echo '{"id":"list-output-'$(date +%s)'","host":"runpod","command":"ls -lh /workspace/output/*.png | tail -5"}' >> ops_queue/requests.jsonl
+echo '{"id":"list-output-'$(date +%s)'","host":"runpod","command":"ls -lh /workspace/output/*.png | tail -5"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 
 # Wait a few seconds, then:
-tail -1 ops_queue/results.jsonl | jq -r '.stdout'
+tail -1 /Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl | jq -r '.stdout'
 ```
 
 **Download everything:**
 
 ```bash
 # Pod → R2
-echo '{"id":"upload-results-'$(date +%s)'","host":"runpod","command":"rclone copy /workspace/output/ r2_pose_factory:pose-factory/output/"}' >> ops_queue/requests.jsonl
+echo '{"id":"upload-results-'$(date +%s)'","host":"runpod","command":"rclone copy /workspace/output/ r2_pose_factory:pose-factory/output/"}' >> /Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl
 
 # R2 → Local
 rclone copy r2_pose_factory:pose-factory/output/ data/output/ --progress
@@ -139,7 +140,8 @@ rclone copy shared/scripts/generate_character_from_cube.py r2_pose_factory:pose-
 ### "SSH agent not running"
 **Fix:**
 ```bash
-./ssh_agent/start_agent.sh
+cd /Users/eriksjaastad/projects/_tools/ssh_agent
+./start_agent.sh
 ```
 
 ### "No AI-generated image found"

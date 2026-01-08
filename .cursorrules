@@ -1,0 +1,134 @@
+# Cursor Rules - 3D Pose Factory
+
+## 📝 Markdown & Documentation Standards
+
+### YAML Frontmatter (CRITICAL)
+- **ALWAYS preserve YAML frontmatter** when editing `.md` files
+- Every markdown file should have frontmatter with:
+  ```yaml
+  ---
+  tags:
+    - p/3d-pose-factory
+    - type/rendering-pipeline
+    - domain/3d-graphics
+    - tech/python
+    - tech/blender
+  status: #status/active
+  created: YYYY-MM-DD
+  ---
+  ```
+
+### Tag Taxonomy
+- Use **nested tags** for hierarchy: `#type/rendering-pipeline`, `#tech/python/blender`
+- Tag structure:
+  - `#p/3d-pose-factory` - Project namespace
+  - `#type/rendering-pipeline` - Automated 3D rendering system
+  - `#domain/3d-graphics` - Character rendering and pose generation
+  - `#tech/python/blender` - Technology stack
+
+### Obsidian Wikilinks
+- Use `[[3D Pose Factory]]` to link to this project
+- Link to `[[00_Index_3d-pose-factory]]` when referencing documentation
+
+---
+
+## 🚫 Context Window Management
+
+**NEVER waste context on:**
+- `node_modules/`, `__pycache__/`, `.git/`
+- `venv/` - Virtual environment
+- `output/` - Rendered images (thousands of PNG files)
+- `*.blend` - Blender files (large binary)
+- `*.fbx` - Character models (large binary)
+
+**When reading files:**
+- Use targeted reads for large Python scripts
+- Don't try to read binary 3D files
+
+---
+
+## 📋 Project Overview
+
+**Purpose:** Automated 3D character rendering pipeline using Blender + RunPod GPU infrastructure.
+
+**Architecture:**
+- Local: Character creation, pose configuration
+- Cloud: RunPod GPU pods for rendering
+- Storage: Cloudflare R2 for assets and results
+
+**Key Components:**
+- `mission_control.py` - Job orchestration and RunPod API
+- `ssh_agent/` - Async SSH command execution
+- `dashboard/` - Job monitoring web UI
+- `character-creation/` - Stability AI character generation
+
+---
+
+## ☁️ External Services
+
+**Cloud Infrastructure:**
+- **RunPod** - GPU compute for Blender rendering (~$0.30/hour)
+- **Cloudflare R2** - Object storage for inputs/outputs
+- **Stability AI** - Character image generation API
+
+**SSH Access:**
+- RunPod pods via SSH (automated via ssh_agent)
+- Credentials in `~/.ssh/config`
+
+**Tracked in:** `/Users/eriksjaastad/projects/project-scaffolding/EXTERNAL_RESOURCES.md`
+
+---
+
+## 🔐 Credentials & Environment
+
+**Required environment variables:**
+- `RUNPOD_API_KEY` - For pod management
+- `R2_ACCESS_KEY_ID` - Cloudflare R2 storage
+- `R2_SECRET_ACCESS_KEY` - Cloudflare R2 storage
+- `R2_ENDPOINT` - R2 bucket endpoint
+- `STABILITY_API_KEY` - Character generation (optional)
+
+**Config files:**
+- `ssh_agent/hosts.yaml` - SSH host definitions
+- `.env` - API keys (gitignored)
+
+---
+
+## 🛡️ Safety Rules
+
+### Cost Controls
+- RunPod pods are expensive (~$0.30-$1/hour)
+- ALWAYS terminate pods after rendering
+- Monitor active pods via dashboard
+- Set budget alerts
+
+### File Operations
+- Rendered outputs go to `output/` only
+- Don't modify source `.blend` files without backup
+- R2 uploads are permanent (versioning enabled)
+
+---
+
+## 🚀 Mission Control Commands
+
+```bash
+# Start a render job
+python mission_control.py render --characters "char1,char2" --wait
+
+# Check job status
+python mission_control.py status --job JOB_ID
+
+# Download results
+python mission_control.py download --job JOB_ID
+```
+
+**See:** Mission control README for full API
+
+---
+
+## Related Documentation
+
+- **Project Philosophy:** `/Users/eriksjaastad/projects/Trading Projects/PROJECT_PHILOSOPHY.md`
+- **Project Scaffolding:** `/Users/eriksjaastad/projects/project-scaffolding/`
+- **Dashboard:** `dashboard/README.md`
+
