@@ -4,12 +4,12 @@ Mission Control Dashboard - Flask Backend
 Provides web UI for managing RunPod jobs
 
 USAGE (copy-paste ready):
-    cd [PROJECT_ROOT]/dashboard
+    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
     source venv/bin/activate
     python3 app.py
 
 First time setup:
-    cd [PROJECT_ROOT]/dashboard
+    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
     python3 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt

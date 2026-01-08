@@ -4,7 +4,7 @@ Mission Control - Unified command center for RunPod operations
 Handles: upload → job dispatch → monitoring → download
 
 USAGE (copy-paste ready):
-    cd [PROJECT_ROOT]
+    cd "${PROJECTS_ROOT}/3D Pose Factory"
     ./shared/scripts/mission_control.py render --wait
 
 Examples:
@@ -24,6 +24,10 @@ import time
 from datetime import datetime
 from pathlib import Path
 import uuid
+
+# Import shared utilities
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils import DEFAULT_JOB_TIMEOUT
 
 # Configuration
 R2_REMOTE = "r2_pose_factory:pose-factory"
@@ -123,7 +127,7 @@ class MissionControl:
         
         return "unknown"
     
-    def wait_for_job(self, job_id, timeout=3600):
+    def wait_for_job(self, job_id, timeout=DEFAULT_JOB_TIMEOUT):
         """Wait for job to complete, showing progress"""
         print(f"⏳ Waiting for job {job_id} to complete...")
         print(f"   (Pod agent polls every 30 seconds)")

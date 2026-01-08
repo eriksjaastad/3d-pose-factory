@@ -1,0 +1,12 @@
+# 3D Pose Factory - Render Constants
+# DNA Compliance: Extracted from code to allow configuration without code changes.
+
+resolution:
+  width: 512
+  height: 512
+  string: "512x512"
+
+camera:
+  height: 1.6
+  default_distance: 3.5
+  default_fov: 39.6

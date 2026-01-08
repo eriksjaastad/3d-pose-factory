@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 #
 # 3D Pose Factory - Automated Render Pipeline
 # 
@@ -11,8 +12,6 @@
 #   pose-rendering/scripts/render_pipeline.sh --batch          # Render all characters
 #   pose-rendering/scripts/render_pipeline.sh --single         # Render just X Bot for testing
 #   pose-rendering/scripts/render_pipeline.sh --download-only  # Just download existing results
-
-set -e  # Exit on any error
 
 # Configuration
 PROJECT_DIR="$HOME/projects/3D Pose Factory"
@@ -33,8 +32,8 @@ MODE="batch"
 SKIP_UPLOAD=false
 SKIP_RENDER=false
 
-while [[ $# -gt 0 ]]; do
-    case $1 in
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
         --single)
             MODE="single"
             shift
@@ -128,7 +127,7 @@ echo ""
 # Optional: Open automatically
 read -p "Open results folder now? (y/n) " -n 1 -r
 echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     open "$OUTPUT_DIR"
 fi
 

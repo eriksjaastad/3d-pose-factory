@@ -89,7 +89,7 @@ character-creation/scripts/character_pipeline.sh
 ### Dashboard Setup (One Time)
 
 ```bash
-cd /Users/eriksjaastad/projects/3D\ Pose\ Factory/dashboard
+cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -98,7 +98,7 @@ pip install -r requirements.txt
 ### Daily Usage
 
 ```bash
-cd /Users/eriksjaastad/projects/3D\ Pose\ Factory/dashboard
+cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
 source venv/bin/activate
 python3 app.py
 ```

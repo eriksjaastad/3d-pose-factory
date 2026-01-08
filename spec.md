@@ -1633,7 +1633,7 @@ def setup_logging(name: str, level: str = "INFO") -> logging.Logger:
 ### DISCREPANCY-001: Camera Height Mismatch
 
 **Spec Claims** (render_simple_working.py docstring line 8):
-> Camera height: 1.0 meters (middle of character)
+> Camera height: 1.6 meters (near head height)
 
 **Actual Code** (line 71):
 ```python

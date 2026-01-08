@@ -19,11 +19,16 @@ Usage:
 import argparse
 import base64
 import glob
+import logging
 import os
 import requests
 import sys
 import time
 from pathlib import Path
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 # Import shared utilities
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "shared"))
@@ -113,7 +118,9 @@ def call_structure_control_api(api_key, image_path, prompt, negative_prompt, con
         try:
             error_json = response.json()
             error_msg = error_json.get('message', error_json.get('errors', response.text))
-        except:
+        except Exception as e:
+            # DNA Fix: Log parsing error instead of silent failure
+            logger.warning(f"Could not parse error JSON: {e}")
             pass
         raise Exception(f"API error {response.status_code}: {error_msg}")
     
@@ -159,7 +166,9 @@ def call_sketch_control_api(api_key, image_path, prompt, negative_prompt, contro
         try:
             error_json = response.json()
             error_msg = error_json.get('message', error_json.get('errors', response.text))
-        except:
+        except Exception as e:
+            # DNA Fix: Log parsing error instead of silent failure
+            logger.warning(f"Could not parse error JSON: {e}")
             pass
         raise Exception(f"API error {response.status_code}: {error_msg}")
     

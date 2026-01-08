@@ -7,7 +7,7 @@
 # Downloads scripts from R2, installs Charmorph, tests it
 ###############################################################################
 
-set -e
+set -euo pipefail
 
 # Colors
 GREEN='\033[0;32m'

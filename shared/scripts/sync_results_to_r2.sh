@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 ###############################################################################
 # Sync Results to R2
 # 
@@ -8,14 +9,9 @@
 #   ./sync_results_to_r2.sh [--include-logs] [--include-scratch]
 ###############################################################################
 
-set -e
-
-INCLUDE_LOGS=false
-INCLUDE_SCRATCH=false
-
 # Parse args
 for arg in "$@"; do
-    case $arg in
+    case "$arg" in
         --include-logs) INCLUDE_LOGS=true ;;
         --include-scratch) INCLUDE_SCRATCH=true ;;
     esac

@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 # Point to the central SSH Agent queue in _tools
-OPS_QUEUE = Path(os.getenv("SSH_AGENT_QUEUE", "/Users/eriksjaastad/projects/_tools/ssh_agent/queue"))
+OPS_QUEUE = Path(os.getenv("SSH_AGENT_QUEUE", "${PROJECTS_ROOT}/_tools/ssh_agent/queue"))
 REQUESTS = OPS_QUEUE / "requests.jsonl"
 RESULTS = OPS_QUEUE / "results.jsonl"
 POD_ID_FILE = ROOT / ".pod_id"

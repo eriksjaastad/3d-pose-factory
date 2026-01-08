@@ -29,3 +29,10 @@ def get_env_var(name: str, default=None) -> str:
     # Doppler naming convention: [PROJECT]_[VAR]
     doppler_name = f"D3D_POSE_FACTORY_{name}"
     return os.getenv(doppler_name) or os.getenv(name) or default
+
+# DNA Resilience: Centralized Constants to eliminate Magic Numbers
+SDXL_RESOLUTION = 1024
+EEVEE_RESOLUTION = 512
+DEFAULT_JOB_TIMEOUT = 3600
+DEFAULT_SSH_TIMEOUT = 300
+STABILITY_COST_PER_IMAGE = 0.04

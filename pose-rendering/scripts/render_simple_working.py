@@ -4,7 +4,7 @@ Uses simple, proven camera positions - no complex math needed!
 
 After hours of debugging, we found:
 - Camera distance: 3.5 meters works perfectly
-- Camera height: 1.0 meters (middle of character)  
+- Camera height: 1.6 meters (near head height)
 - Don't "normalize" - just import and render!
 """
 
@@ -12,6 +12,24 @@ import bpy
 import sys
 import os
 import math
+import yaml
+from pathlib import Path
+
+def load_render_constants():
+    """Load render constants from YAML config."""
+    # Find project root (assume we are in pose-rendering/scripts/)
+    # For RunPod, we check standard locations
+    paths_to_check = [
+        Path(__file__).resolve().parent.parent.parent / "config" / "render_constants.yaml",
+        Path("/workspace/config/render_constants.yaml"),
+        Path("./config/render_constants.yaml")
+    ]
+    
+    for config_path in paths_to_check:
+        if config_path.exists():
+            with open(config_path, 'r') as f:
+                return yaml.safe_load(f)
+    return None
 
 def render_character_simple(fbx_path, output_dir, num_angles=8):
     """
@@ -22,6 +40,13 @@ def render_character_simple(fbx_path, output_dir, num_angles=8):
         output_dir: Where to save images
         num_angles: Number of camera angles (default 8)
     """
+    # Load constants
+    constants = load_render_constants()
+    res_x = constants.get('resolution', {}).get('width', 512) if constants else 512
+    res_y = constants.get('resolution', {}).get('height', 512) if constants else 512
+    camera_distance = constants.get('camera', {}).get('default_distance', 3.5) if constants else 3.5
+    camera_height = constants.get('camera', {}).get('height', 1.6) if constants else 1.6
+
     # Clear scene
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete()
@@ -37,8 +62,8 @@ def render_character_simple(fbx_path, output_dir, num_angles=8):
     
     # Render settings
     scene = bpy.context.scene
-    scene.render.resolution_x = 512
-    scene.render.resolution_y = 512
+    scene.render.resolution_x = res_x
+    scene.render.resolution_y = res_y
     scene.render.engine = 'BLENDER_EEVEE'
     scene.eevee.taa_render_samples = 64
     
@@ -66,10 +91,7 @@ def render_character_simple(fbx_path, output_dir, num_angles=8):
     for i, angle_deg in enumerate(angles):
         angle_rad = math.radians(angle_deg)
         
-        # Camera position - circular orbit at distance 3.5
-        camera_distance = 3.5
-        camera_height = 1.6  # Raised to near head height for more natural viewing angle
-        
+        # Camera position
         cam_x = camera_distance * math.sin(angle_rad)
         cam_y = -camera_distance * math.cos(angle_rad)  # Negative Y = in front
         cam_z = camera_height

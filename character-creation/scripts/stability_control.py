@@ -109,7 +109,9 @@ def call_structure_control(api_key, image_path, prompt, negative_prompt, control
         try:
             error = response.json()
             raise Exception(f"API error {response.status_code}: {error}")
-        except:
+        except Exception as e:
+            # DNA Fix: Log JSON parsing error
+            print(f"      ⚠️  Could not parse error JSON: {e}")
             raise Exception(f"API error {response.status_code}: {response.text[:500]}")
     
     return response.content  # Raw image bytes
@@ -150,7 +152,9 @@ def call_sketch_control(api_key, image_path, prompt, negative_prompt, control_st
         try:
             error = response.json()
             raise Exception(f"API error {response.status_code}: {error}")
-        except:
+        except Exception as e:
+            # DNA Fix: Log JSON parsing error
+            print(f"      ⚠️  Could not parse error JSON: {e}")
             raise Exception(f"API error {response.status_code}: {response.text[:500]}")
     
     return response.content

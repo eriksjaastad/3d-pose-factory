@@ -23,7 +23,7 @@ All review, curation, and generation with SDXL/ComfyUI stays local.
 
 ## 2. Local Directory Layout
 
-Under the project root (`[PROJECT_ROOT]`), we will use:
+Under the project root (`${PROJECTS_ROOT}/3D Pose Factory`), we will use:
 
 - `scripts/`  
   - All Python/CLI utilities live here.  

@@ -1,11 +1,11 @@
 # SSH Agent Protocol
 
-You have access to an SSH Agent that reads commands from `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl`
-and writes results to `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl`.
+You have access to an SSH Agent that reads commands from "${PROJECTS_ROOT}/_tools/ssh_agent/queue/requests.jsonl"
+and writes results to "${PROJECTS_ROOT}/_tools/ssh_agent/queue/results.jsonl".
 
 ## How to request a command
 
-- Append **one JSON object per line** to `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/requests.jsonl`.
+- Append **one JSON object per line** to "${PROJECTS_ROOT}/_tools/ssh_agent/queue/requests.jsonl".
 - Each object MUST have this shape:
 
 {
@@ -26,7 +26,7 @@ Example:
 
 ## How to read results
 
-- The agent appends JSON lines to `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl` with this shape:
+- The agent appends JSON lines to "${PROJECTS_ROOT}/_tools/ssh_agent/queue/results.jsonl" with this shape:
 
 {
   "id": "<same id as request>",
@@ -38,7 +38,7 @@ Example:
   "ts": "<ISO8601 timestamp>"
 }
 
-- When you need the output of a command you requested, scan `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/results.jsonl`
+- When you need the output of a command you requested, scan "${PROJECTS_ROOT}/_tools/ssh_agent/queue/results.jsonl"
   for the latest entry with the matching `id`.
 
 ## Safety rules

@@ -7,7 +7,7 @@
 # Then RunPod can download them
 ###############################################################################
 
-set -e
+set -euo pipefail
 
 # Colors
 GREEN='\033[0;32m'

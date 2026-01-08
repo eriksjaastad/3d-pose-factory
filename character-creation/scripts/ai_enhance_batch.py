@@ -53,8 +53,9 @@ def setup_ai_render():
     # Enable AI Render addon
     try:
         bpy.ops.preferences.addon_enable(module='AI-Render')
-    except:
-        pass  # May already be enabled
+    except Exception as e:
+        # DNA Fix: Log addon enable error
+        print(f"   ⚠️  Attempted to enable AI-Render addon, but encountered: {e}")
     
     # Check if AI Render properties exist
     if not hasattr(scene, 'air_props'):
