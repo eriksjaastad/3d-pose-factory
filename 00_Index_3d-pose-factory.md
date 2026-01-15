@@ -12,7 +12,7 @@ tags:
 created: 2025-12-31
 ---
 
-# 3D Pose Factory
+# 3d-pose-factory
 
 AI-powered 3D character pipeline for pose detection training data generation using Blender automation on RunPod GPUs. This production system renders Mixamo characters from 8 angles in 2-3 minutes (48 images per batch), featuring Mission Control orchestration, smart camera framing, and MediaPipe training data output. The system includes both a web dashboard (Flask) and CLI for job submission, with SSH agent automation and Cloudflare R2 storage integration.
 
@@ -60,3 +60,6 @@ AI-powered 3D character pipeline for pose detection training data generation usi
 **Last Major Update:** November 2025 (Mission Control complete)  
 **Infrastructure:** #infra/runpod #infra/r2
 
+
+scaffolding_version: 1.0.0
+scaffolding_date: 2026-01-14

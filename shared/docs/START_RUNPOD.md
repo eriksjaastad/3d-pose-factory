@@ -1,8 +1,8 @@
-# 3D Pose Factory - Quick Start Guide
+# 3d-pose-factory - Quick Start Guide
 
 ## How to Start and Run a Processing Session
 
-Follow these steps each time you want to process images with the 3D Pose Factory.
+Follow these steps each time you want to process images with the 3d-pose-factory.
 
 ---
 
@@ -92,7 +92,7 @@ rclone ls r2_pose_factory:pose-factory/output/
 
 Download a specific processed batch:
 ```bash
-rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "${PROJECTS_ROOT}/3D Pose Factory/data/raw/" -v
+rclone copy r2_pose_factory:pose-factory/output/processed-[timestamp]/ "${PROJECTS_ROOT}/3d-pose-factory/data/raw/" -v
 ```
 
 ---
@@ -117,7 +117,7 @@ nvidia-smi
 
 ### Test single image:
 ```bash
-python3 pose_test.py input/test_image.jpg
+doppler run -- python3 pose_test.py input/test_image.jpg
 ```
 
 ### List files in R2:

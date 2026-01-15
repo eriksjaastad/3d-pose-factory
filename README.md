@@ -35,14 +35,14 @@ Use Blender + AI to create custom 3D characters → Feed to rendering pipeline
 ```bash
 # First time setup
 cd dashboard
-python3 -m venv venv
+doppler run -- python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
 # Start the dashboard (subsequent runs)
 cd dashboard
 source venv/bin/activate
-python3 app.py
+doppler run -- python3 app.py
 
 # Browser auto-opens to: http://localhost:5001
 ```
@@ -89,8 +89,8 @@ character-creation/scripts/character_pipeline.sh
 ### Dashboard Setup (One Time)
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
-python3 -m venv venv
+cd "${PROJECTS_ROOT}/3d-pose-factory/dashboard"
+doppler run -- python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -98,9 +98,9 @@ pip install -r requirements.txt
 ### Daily Usage
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
+cd "${PROJECTS_ROOT}/3d-pose-factory/dashboard"
 source venv/bin/activate
-python3 app.py
+doppler run -- python3 app.py
 ```
 
 Browser opens automatically to http://localhost:5001
@@ -113,8 +113,8 @@ Browser opens automatically to http://localhost:5001
 
 ## 📁 Project Structure
 
-```
-3D Pose Factory/
+```bash
+3d-pose-factory/
 │
 ├── dashboard/               ← 🎨 NEW! Web UI for everything
 │   ├── app.py               ← Flask backend
@@ -269,3 +269,32 @@ Browser opens automatically to http://localhost:5001
 🚧 Character Creation - Structure ready, tool selection in progress
 
 **Built with:** Production-grade pipeline engineering + mathematical camera framing + cloud automation
+
+
+<!-- project-scaffolding template appended -->
+
+# [PROJECT_NAME]
+
+[Brief 2-3 sentence description of the project.]
+
+## Quick Start
+
+### Installation
+```bash
+# [Add installation steps here]
+```
+
+### Usage
+```bash
+# [Add usage steps here]
+```
+
+## Documentation
+See the `Documents/` directory for detailed documentation:
+- [Architecture Overview](Documents/ARCHITECTURE_OVERVIEW.md)
+- [Operations Guide](Documents/OPERATIONS_GUIDE.md)
+
+## Status
+- **Current Phase:** [Phase Name]
+- **Status:** #status/active
+

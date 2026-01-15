@@ -1,6 +1,6 @@
 #!/bin/bash
 ###############################################################################
-# 3D Pose Factory - Pod Setup Script
+# 3d-pose-factory - Pod Setup Script
 # 
 # Run this once on a fresh RunPod pod to set up everything:
 #   - Blender + graphics libraries
@@ -18,7 +18,7 @@
 set -euo pipefail  # Exit on error, undefined vars, and pipe failures
 
 echo "========================================"
-echo "  3D Pose Factory - Pod Setup v2.0"
+echo "  3d-pose-factory - Pod Setup v2.0"
 echo "========================================"
 echo ""
 
@@ -106,7 +106,7 @@ echo "[6/8] Setting up config.yaml..."
 
 if [ ! -f "/workspace/config/config.yaml" ]; then
     cat > /workspace/config/config.yaml << 'EOF'
-# 3D Pose Factory - Pod Configuration
+# 3d-pose-factory - Pod Configuration
 # This file tells scripts where things are located
 
 paths:
@@ -158,7 +158,8 @@ if [ -d "/workspace/blender-addons/AI-Render" ]; then
     
     # Add API keys if .env exists
     if [ -f "/workspace/.env" ]; then
-        source /workspace/.env
+        ENV_FILE="/workspace/.env"
+        source "$ENV_FILE"
         cat >> ~/.config/blender/4.0/scripts/addons/AI-Render/config.py << EOF
 
 # API Keys - Auto-appended by setup_pod.sh

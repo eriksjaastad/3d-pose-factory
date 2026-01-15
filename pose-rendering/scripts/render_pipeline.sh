@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 #
-# 3D Pose Factory - Automated Render Pipeline
+# 3d-pose-factory - Automated Render Pipeline
 # 
 # This script automates the entire workflow:
 # 1. Upload Blender scripts to R2
@@ -14,7 +14,7 @@ set -euo pipefail
 #   pose-rendering/scripts/render_pipeline.sh --download-only  # Just download existing results
 
 # Configuration
-PROJECT_DIR="$HOME/projects/3D Pose Factory"
+PROJECT_DIR="$HOME/projects/3d-pose-factory"
 R2_REMOTE="r2_pose_factory:pose-factory"
 POD_USER="root"
 POD_HOST=""  # You'll need to fill this in each time (or we can make it interactive)
@@ -61,7 +61,7 @@ if [ -z "$POD_HOST" ]; then
 fi
 
 echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  3D Pose Factory Render Pipeline      ║${NC}"
+echo -e "${BLUE}║  3d-pose-factory Render Pipeline      ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
 echo ""
 

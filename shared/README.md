@@ -45,7 +45,7 @@ ssh -i ~/.ssh/id_ed25519 root@YOUR_POD_ID-ssh.runpod.io -p PORT
 # 4. Run setup script
 cd /workspace
 git clone YOUR_REPO_URL
-cd "3D Pose Factory/shared/scripts"
+cd "3d-pose-factory/shared/scripts"
 ./setup_pod.sh
 ```
 

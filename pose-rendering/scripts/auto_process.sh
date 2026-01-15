@@ -1,11 +1,11 @@
 #!/bin/bash
-# Auto-run script for 3D Pose Factory
+# Auto-run script for 3d-pose-factory
 # This script runs automatically when the pod starts
 
 set -euo pipefail  # Exit on error, undefined vars, and pipe failures
 
 echo "================================"
-echo "3D Pose Factory - Auto Processing"
+echo "3d-pose-factory - Auto Processing"
 echo "================================"
 echo ""
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 3D Pose Factory – RunPod pod bootstrap script
+# 3d-pose-factory – RunPod pod bootstrap script
 #
 # Usage (inside a fresh RunPod pod, as root):
 #   apt update && apt install -y git
@@ -51,7 +51,7 @@ fi
 
 echo "[setup] Activating virtual environment..."
 set +u
-source .venv/bin/activate
+source "$WORKDIR/.venv/bin/activate"
 set -u
 
 echo "[setup] Upgrading pip and installing Python libraries..."
@@ -66,6 +66,6 @@ pip install \
 echo "[setup] Done. To use this environment next time, run:"
 echo "  ssh <pod-id>@ssh.runpod.io -i ~/.ssh/id_ed25519"
 echo "  cd ${WORKDIR}"
-echo "  source .venv/bin/activate"
+echo "  source "$WORKDIR/.venv/bin/activate""
 
 

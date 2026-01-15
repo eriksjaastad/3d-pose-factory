@@ -45,7 +45,7 @@ rclone lsd r2_pose_factory:pose-factory/blender-addons/
 On your Mac:
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory/shared"
+cd "${PROJECTS_ROOT}/3d-pose-factory/shared"
 cp .env.example .env
 ```
 
@@ -67,7 +67,7 @@ rclone copy .env r2_pose_factory:pose-factory/shared/ --progress
 Upload the updated setup script:
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory"
+cd "${PROJECTS_ROOT}/3d-pose-factory"
 rclone copy shared/scripts/setup_pod.sh r2_pose_factory:pose-factory/shared/scripts/ --progress
 ```
 

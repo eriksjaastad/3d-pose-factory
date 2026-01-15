@@ -1,4 +1,4 @@
-# 3D Pose Factory - Workflow Cheatsheet
+# 3d-pose-factory - Workflow Cheatsheet
 
 Quick reference for your complete pipeline: Mac → R2 → RunPod → R2 → Mac
 
@@ -49,7 +49,7 @@ Skips the interactive prompt for pod ID
 2. Select character (e.g., "X Bot")
 3. Choose animation
 4. Download with FBX format
-5. Save to: `~/projects/3D Pose Factory/downloads/`
+5. Save to: `~/projects/3d-pose-factory/downloads/`
 
 ---
 
@@ -180,7 +180,7 @@ ls -lh output/batch_multi_angle/
 cd /workspace/pose-factory/
 
 # Process rendered images with MediaPipe
-python3 scripts/batch_process.py
+doppler run -- python3 scripts/batch_process.py
 
 # Or use the automated workflow:
 bash scripts/auto_process.sh
@@ -253,7 +253,7 @@ mv data/working data/archive/$(date +%Y%m%d_%H%M%S)
 # === ON MAC ===
 
 # 1. Download Mixamo characters (web browser)
-# → Save to ~/projects/3D Pose Factory/downloads/
+# → Save to ~/projects/3d-pose-factory/downloads/
 
 # 2. Upload to R2
 cd ~/projects/3D\ Pose\ Factory/
@@ -358,14 +358,14 @@ blender --background --python scripts/render_multi_angle.py
 ### Change Number of Angles
 
 Edit `render_multi_angle.py`:
-```python
+```bash
 NUM_ANGLES = 4  # or 8, 16, etc.
 ```
 
 ### Change Resolution
 
 Edit script:
-```python
+```bash
 scene.render.resolution_x = 1024  # Default: 512
 scene.render.resolution_y = 1024  # Default: 512
 ```
@@ -373,7 +373,7 @@ scene.render.resolution_y = 1024  # Default: 512
 ### Render Full Animation (Not Just Frame 1)
 
 Edit script:
-```python
+```bash
 render_character_multi_angle(
     fbx_path,
     output_dir,
@@ -385,7 +385,7 @@ render_character_multi_angle(
 ### Adjust Camera Distance (Padding)
 
 Edit `blender_camera_utils.py`:
-```python
+```bash
 calculate_camera_position(
     bbox_min, bbox_max,
     padding_factor=1.3  # Default: 1.2 (20% padding)

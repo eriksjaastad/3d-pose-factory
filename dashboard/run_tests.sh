@@ -4,14 +4,14 @@ set -euo pipefail
 # Dashboard Test Runner
 #
 # USAGE (copy-paste ready):
-#     cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
-#     source venv/bin/activate
+#     cd "${PROJECTS_ROOT}/3d-pose-factory/dashboard"
+#     source "$(dirname "$0")/venv/bin/activate"
 #     ./run_tests.sh
 ###############################################################################
 
 # Activate venv if not already activated
 if [ -z "${VIRTUAL_ENV:-}" ]; then
-    source venv/bin/activate
+    source "$(dirname "$0")/venv/bin/activate"
 fi
 
 # Run all tests

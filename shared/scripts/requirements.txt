@@ -1,4 +1,4 @@
-# Python dependencies for 3D Pose Factory local scripts
+# Python dependencies for 3d-pose-factory local scripts
 # Install with: pip install -r requirements.txt
 
 # For future sync script enhancements

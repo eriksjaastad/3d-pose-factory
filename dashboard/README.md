@@ -23,14 +23,14 @@ A local web dashboard that runs on your Mac and gives you a visual interface for
 ```bash
 # First time setup
 cd dashboard
-python3 -m venv venv
+doppler run -- python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
 # Start the dashboard (subsequent runs)
 cd dashboard
 source venv/bin/activate
-python3 app.py
+doppler run -- python3 app.py
 
 # Browser auto-opens to: http://localhost:5001
 ```
@@ -44,7 +44,7 @@ source venv/bin/activate
 ./run_tests.sh
 
 # Or run specific test file
-python -m pytest tests/test_cost_calculator.py -v
+doppler run -- python -m pytest tests/test_cost_calculator.py -v
 ```
 
 **Current Test Coverage:**
@@ -86,7 +86,7 @@ python -m pytest tests/test_cost_calculator.py -v
 
 ## Project Structure
 
-```
+```bash
 dashboard/
 ├── app.py                  # Flask backend
 ├── requirements.txt        # Python dependencies
@@ -106,7 +106,7 @@ dashboard/
 
 ### Run in Dev Mode
 ```bash
-python3 app.py
+doppler run -- python3 app.py
 ```
 
 Dashboard runs on `http://localhost:5000`

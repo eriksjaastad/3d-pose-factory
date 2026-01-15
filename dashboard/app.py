@@ -4,12 +4,12 @@ Mission Control Dashboard - Flask Backend
 Provides web UI for managing RunPod jobs
 
 USAGE (copy-paste ready):
-    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
+    cd "${PROJECTS_ROOT}/3d-pose-factory/dashboard"
     source venv/bin/activate
     python3 app.py
 
 First time setup:
-    cd "${PROJECTS_ROOT}/3D Pose Factory/dashboard"
+    cd "${PROJECTS_ROOT}/3d-pose-factory/dashboard"
     python3 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
@@ -271,7 +271,7 @@ def start_pod():
     try:
         # Create pod with our custom setup
         pod = runpod.create_pod(
-            name="3D-Pose-Factory",
+            name="3d-pose-factory",
             image_name="runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04",
             gpu_type_id="NVIDIA A40",
             cloud_type="SECURE",

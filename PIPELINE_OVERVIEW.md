@@ -227,7 +227,7 @@ rclone copy r2_pose_factory:pose-factory/output/ data/output/
 ## 📁 Project Structure
 
 ```
-3D Pose Factory/
+3d-pose-factory/
 ├── _tools/ssh_agent/          # Automated SSH command execution (central)
 │   ├── agent.py             # Main agent (pexpect-based)
 │   ├── ssh_hosts.yaml       # Host configurations

@@ -367,7 +367,7 @@ camera = cam_utils.setup_camera_for_character(
 ## 📁 File Organization
 
 ```
-3D Pose Factory/
+3d-pose-factory/
 ├── scripts/
 │   ├── blender_camera_utils.py      ← Core library (import this)
 │   ├── render_mixamo_v2.py          ← Single character render

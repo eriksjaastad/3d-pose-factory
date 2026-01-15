@@ -1,4 +1,4 @@
-# 3D Pose Factory - Simple Workflow (No Local Blender)
+# 3d-pose-factory - Simple Workflow (No Local Blender)
 
 ## 🚀 **AUTOMATED PIPELINE (Use This!)** 
 
@@ -60,7 +60,7 @@ Saves one step if you know your current pod ID
 │                         YOUR MAC                                 │
 │                                                                  │
 │  1. Download Mixamo FBX files                                   │
-│     → Save to: ~/projects/3D Pose Factory/downloads/            │
+│     → Save to: ~/projects/3d-pose-factory/downloads/            │
 │                                                                  │
 │  2. Upload to R2 cloud storage                                  │
 │     $ rclone copy downloads/ r2_pose_factory:.../characters/    │

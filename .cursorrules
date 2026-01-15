@@ -1,4 +1,4 @@
-# Cursor Rules - 3D Pose Factory
+# Cursor Rules - 3d-pose-factory
 
 ## 📝 Markdown & Documentation Standards
 
@@ -27,7 +27,7 @@
   - `#tech/python/blender` - Technology stack
 
 ### Obsidian Wikilinks
-- Use `[[3D Pose Factory]]` to link to this project
+- Use `[[3d-pose-factory]]` to link to this project
 - Link to `[[00_Index_3d-pose-factory]]` when referencing documentation
 
 ---
@@ -128,7 +128,11 @@ python mission_control.py download --job JOB_ID
 
 ## Related Documentation
 
-- **Project Philosophy:** `${PROJECTS_ROOT}/Trading Projects/PROJECT_PHILOSOPHY.md`
+- **Project Philosophy:** `${PROJECTS_ROOT}/trading-copilot/PROJECT_PHILOSOPHY.md`
 - **Project Scaffolding:** `${PROJECTS_ROOT}/project-scaffolding/`
 - **Dashboard:** `dashboard/README.md`
+
+
+<!-- project-scaffolding template appended -->
+
 

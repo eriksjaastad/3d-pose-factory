@@ -1,4 +1,4 @@
-# 3D Pose Factory - System Specification
+# 3d-pose-factory - System Specification
 
 **Version**: 1.0.0
 **Audit Date**: 2026-01-08
@@ -27,7 +27,7 @@
 
 ### What This System Is
 
-**3D Pose Factory** is a production pipeline for generating 3D character pose training data. It automates:
+**3d-pose-factory** is a production pipeline for generating 3D character pose training data. It automates:
 
 1. **Pose Rendering**: Multi-angle renders of Mixamo FBX characters using Blender (production-ready)
 2. **Character Creation**: AI-assisted 3D character generation (R&D phase, placeholder implementation)
@@ -553,7 +553,7 @@ no_check_bucket = true
 | `render_simple_working.py:71` | `1.6` | Camera height |
 | `render_simple_working.py:40-42` | `512x512` | Resolution |
 | `pod_agent.sh:26` | `30` | Poll interval |
-| `bootstrap_pod.py:26-27` | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue` | **HARDCODED USER PATH** |
+| `bootstrap_pod.py:26-27` | `../_tools/ssh_agent/queue` | **HARDCODED USER PATH** |
 
 ---
 
@@ -561,7 +561,7 @@ no_check_bucket = true
 
 ### TD-001: Hardcoded User Path in bootstrap_pod.py
 - **File**: `shared/scripts/bootstrap_pod.py:26-27`
-- **Issue**: Contains hardcoded path `/Users/eriksjaastad/projects/_tools/ssh_agent/queue`
+- **Issue**: Contains hardcoded path `../_tools/ssh_agent/queue`
 - **Impact**: Script unusable by other developers
 - **Severity**: HIGH
 
@@ -729,7 +729,7 @@ shared/scripts/setup_pod.sh
 └── blender
 
 shared/scripts/bootstrap_pod.py
-├── [HARDCODED PATH: /Users/eriksjaastad/...]
+├── [HARDCODED PATH: [USER_HOME]/...]
 ├── json
 └── pathlib
 ```
@@ -801,12 +801,12 @@ shared/scripts/bootstrap_pod.py
 
 | File | Line | Hardcoded Path |
 |------|------|----------------|
-| `shared/scripts/bootstrap_pod.py` | 26 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue` |
+| `shared/scripts/bootstrap_pod.py` | 26 | `../_tools/ssh_agent/queue` |
 | `shared/scripts/bootstrap_pod.py` | 27-28 | REQUESTS, RESULTS derived from above |
 
 ```python
 # bootstrap_pod.py:26-28 — CRITICAL FAILURE
-OPS_QUEUE = Path("/Users/eriksjaastad/projects/_tools/ssh_agent/queue")
+OPS_QUEUE = Path("../_tools/ssh_agent/queue")
 REQUESTS = OPS_QUEUE / "requests.jsonl"
 RESULTS = OPS_QUEUE / "results.jsonl"
 ```
@@ -817,16 +817,16 @@ RESULTS = OPS_QUEUE / "results.jsonl"
 
 | File | Count | Example Path |
 |------|-------|--------------|
-| `QUICKSTART.md` | 9 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
-| `PIPELINE_OVERVIEW.md` | 10 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
-| `ssh_agent_protocol.md` | 6 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
-| `BLENDER_AI_FULL_DREAM_PIPELINE.md` | 2 | `/Users/eriksjaastad/projects/_tools/ssh_agent/queue/` |
-| `.cursorrules` | 3 | `/Users/eriksjaastad/projects/` |
-| `README.md` | 2 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
-| `dashboard/app.py` (docstring) | 2 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
-| `shared/scripts/mission_control.py` (docstring) | 1 | `/Users/eriksjaastad/projects/3D Pose Factory/` |
+| `QUICKSTART.md` | 9 | `../_tools/ssh_agent/queue` |
+| `PIPELINE_OVERVIEW.md` | 10 | `../_tools/ssh_agent/queue` |
+| `ssh_agent_protocol.md` | 6 | `../_tools/ssh_agent/queue` |
+| `BLENDER_AI_FULL_DREAM_PIPELINE.md` | 2 | `../_tools/ssh_agent/queue` |
+| `.cursorrules` | 3 | `..` |
+| `README.md` | 2 | `.` |
+| `dashboard/app.py` (docstring) | 2 | `.` |
+| `shared/scripts/mission_control.py` (docstring) | 1 | `.` |
 | `shared/docs/*.md` | 5+ | Various user paths |
-| `pose-rendering/docs/*.md` | 20+ | `~/projects/3D Pose Factory/` |
+| `pose-rendering/docs/*.md` | 20+ | `~/projects/3d-pose-factory/` |
 
 **Total**: 28+ hardcoded user-specific paths across codebase.
 
@@ -834,7 +834,7 @@ RESULTS = OPS_QUEUE / "results.jsonl"
 
 ```python
 # BEFORE (DEFECT)
-OPS_QUEUE = Path("/Users/eriksjaastad/projects/_tools/ssh_agent/queue")
+OPS_QUEUE = Path("../_tools/ssh_agent/queue")
 
 # AFTER (COMPLIANT)
 OPS_QUEUE = Path(os.getenv("SSH_AGENT_QUEUE_PATH", str(Path.home() / ".ssh_agent/queue")))
@@ -879,7 +879,7 @@ OPS_QUEUE = Path(os.getenv("SSH_AGENT_QUEUE_PATH", str(Path.home() / ".ssh_agent
 
 | Purpose | Proposed Doppler Name | Current State |
 |---------|----------------------|---------------|
-| SSH Agent Queue Path | `SSH_AGENT_QUEUE_PATH` | **HARDCODED** `/Users/eriksjaastad/...` |
+| SSH Agent Queue Path | `SSH_AGENT_QUEUE_PATH` | **HARDCODED** `[USER_HOME]/...` |
 | R2 Remote Name | `R2_REMOTE_NAME` | **HARDCODED** `r2_pose_factory:pose-factory` |
 | Pod Workspace Root | `WORKSPACE_ROOT` | **HARDCODED** `/workspace` |
 | Flask Debug Mode | `FLASK_DEBUG` | **HARDCODED** `True` |
@@ -1180,7 +1180,7 @@ app.run(debug=DEBUG, host='0.0.0.0', port=5001)
 
 | # | Action |
 |---|--------|
-| 9 | Replace all `/Users/eriksjaastad/` with `$PROJECT_ROOT` |
+| 9 | Replace all `[USER_HOME]/` with `$PROJECT_ROOT` |
 | 10 | Replace all `~/projects/` with relative paths |
 | 11 | Update SSH examples to use `$SSH_AGENT_QUEUE_PATH` |
 
@@ -1421,7 +1421,7 @@ infrastructure:
 
 ```bash
 # VULNERABLE: Path with spaces will break
-PROJECT_DIR="$HOME/projects/3D Pose Factory"  # OK - quoted definition
+PROJECT_DIR="$HOME/projects/3d-pose-factory"  # OK - quoted definition
 cd "$PROJECT_DIR"                              # OK - quoted usage
 
 # But then:
@@ -1527,7 +1527,7 @@ fi
 
 | File | Line | Path |
 |------|------|------|
-| `render_pipeline.sh` | 18 | `$HOME/projects/3D Pose Factory` |
+| `render_pipeline.sh` | 18 | `$HOME/projects/3d-pose-factory` |
 | `render_pipeline.sh` | 22 | `$HOME/.ssh/id_ed25519` |
 | `upload_to_r2.sh` | 43 | `ssh to6i4tul7p9hk2-644113d9@ssh.runpod.io` (hardcoded pod ID!) |
 | `bootstrap_fresh_pod.sh` | 25-27 | Placeholder credentials |
@@ -1949,7 +1949,7 @@ The cost calculator has a sophisticated multi-provider pricing system with:
 1. **27% dead code** — Nearly 2,000 lines of abandoned experiments
 2. **Zero test coverage** — 9 test files, none in a proper test suite
 3. **Security nightmare** — Path traversal, hardcoded secrets, no input validation
-4. **Single-developer lock-in** — Hardcoded `/Users/eriksjaastad/` makes it unusable by others
+4. **Single-developer lock-in** — Hardcoded `[USER_HOME]/` makes it unusable by others
 5. **Feature creep** — 2,000+ lines for unused AI enhancement features
 
 ### Verdict for Doppler Ecosystem

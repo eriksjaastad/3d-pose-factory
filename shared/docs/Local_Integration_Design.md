@@ -1,6 +1,6 @@
-## 3D Pose Factory – Local Integration Plan
+## 3d-pose-factory – Local Integration Plan
 
-This document describes how your **local macOS laptop** will integrate with the cloud-based 3D Pose Factory (RunPod + Blender + pose extraction + Cloudflare R2).
+This document describes how your **local macOS laptop** will integrate with the cloud-based 3d-pose-factory (RunPod + Blender + pose extraction + Cloudflare R2).
 
 It assumes:
 - RunPod GPU instances generate outputs into a directory like `output/` on the pod.
@@ -23,7 +23,7 @@ All review, curation, and generation with SDXL/ComfyUI stays local.
 
 ## 2. Local Directory Layout
 
-Under the project root (`${PROJECTS_ROOT}/3D Pose Factory`), we will use:
+Under the project root (`${PROJECTS_ROOT}/3d-pose-factory`), we will use:
 
 - `scripts/`  
   - All Python/CLI utilities live here.  

@@ -1,4 +1,4 @@
-# 3D Pose Factory – Base Configuration
+# 3d-pose-factory – Base Configuration
 
 paths:
   local_raw: "./data/raw"

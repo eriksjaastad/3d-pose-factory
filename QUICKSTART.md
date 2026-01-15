@@ -29,7 +29,7 @@
 ### Step 1: Start SSH Agent (once per session)
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory"
+cd "${PROJECTS_ROOT}/3d-pose-factory"
 cd "${PROJECTS_ROOT}/_tools/ssh_agent"
 ./start_agent.sh
 ```
@@ -45,7 +45,7 @@ cd "${PROJECTS_ROOT}/_tools/ssh_agent"
 In a new terminal:
 
 ```bash
-cd "${PROJECTS_ROOT}/3D Pose Factory"
+cd "${PROJECTS_ROOT}/3d-pose-factory"
 
 # Queue the command
 echo '{"id":"generate-'$(date +%s)'","host":"runpod","command":"cd /workspace && rclone copy r2_pose_factory:pose-factory/scripts/generate_character_from_cube.py scripts/ && blender --background --python scripts/generate_character_from_cube.py 2>&1 | tail -50"}' >> "${PROJECTS_ROOT}/_tools/ssh_agent/queue/requests.jsonl"

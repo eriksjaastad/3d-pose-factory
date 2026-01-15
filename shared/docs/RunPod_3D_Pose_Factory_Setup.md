@@ -1,7 +1,7 @@
-# Project B – 3D Pose Factory (Cloud Version)
+# Project B – 3d-pose-factory (Cloud Version)
 ## Full Setup Guide: RunPod GPU Instance + Blender + Pose Extraction + Cloudflare R2 Storage
 
-This document contains everything you need to **set up, run, and maintain** a cloud‑based “3D Pose Factory” using:
+This document contains everything you need to **set up, run, and maintain** a cloud‑based “3d-pose-factory” using:
 
 - **RunPod** for GPU compute  
 - **Blender** for 3D scene + rig control  
@@ -15,7 +15,7 @@ After this is set up, you can follow **Step 7** (full deployment) and start gene
 ---
 
 # 1. Overview
-The **3D Pose Factory** is a separate, cloud‑based project designed to:
+The **3d-pose-factory** is a separate, cloud‑based project designed to:
 
 - Generate **skeletons, poses, depth maps, normal maps** from 3D rigs  
 - Produce unlimited **2D pose references** for your ComfyUI pipeline  
@@ -98,7 +98,7 @@ These outputs feed directly into your **ComfyUI + SDXL** structure-first workflo
 ---
 
 # 6. Architecture Diagram
-```
+```bash
              ┌──────────────────────────┐
              │        RunPod GPU        │
              │  (Ubuntu + Blender +     │
@@ -157,27 +157,27 @@ Cost: **$0.35–$0.65/hr**
 
 ## 7.3 Connect via SSH
 Once it starts:
-```
+```bash
 ssh root@<your-runpod-ip>
 ```
 
 ---
 
 ## 7.4 Install Blender
-```
+```bash
 sudo apt update
 sudo apt install blender -y
 ```
 
 Or for latest version:
-```
+```bash
 sudo snap install blender --classic
 ```
 
 ---
 
 ## 7.5 Install Python Tools
-```
+```bash
 sudo apt install python3 python3-pip -y
 pip3 install numpy pillow opencv-python boto3
 ```
@@ -191,12 +191,12 @@ pip3 install numpy pillow opencv-python boto3
 4. Save Access Key + Secret Key  
 
 ### Install rclone:
-```
+```bash
 sudo apt install rclone -y
 ```
 
 ### Configure:
-```
+```bash
 rclone config
 ```
 
@@ -206,7 +206,7 @@ Choose:
 - Endpoint: `https://<accountid>.r2.cloudflarestorage.com`
 
 Upload example:
-```
+```bash
 rclone copy output/ r2:pose-factory
 ```
 
@@ -214,14 +214,14 @@ rclone copy output/ r2:pose-factory
 
 ## 7.7 Install Pose Extraction Tools
 Example: MediaPipe
-```
+```bash
 pip3 install mediapipe
 ```
 
 ---
 
 ## 7.8 Test Script
-```
+```bash
 # generate_pose.py
 import cv2, mediapipe as mp
 
@@ -236,25 +236,25 @@ cv2.imwrite("pose_out.png", img)
 ```
 
 Run:
-```
-python3 generate_pose.py
+```bash
+doppler run -- python3 generate_pose.py
 ```
 
 ---
 
 ## 7.9 Upload to R2
-```
+```bash
 rclone copy output/ r2:pose-factory
 ```
 
 ---
 
 ## 7.10 Optional Auto-Shutdown
-```
+```bash
 sudo crontab -e
 ```
 Add:
-```
+```bash
 0 * * * * shutdown -h now
 ```
 
@@ -280,4 +280,4 @@ You now have a complete, ready-to-run guide for setting up:
 - Cloudflare R2 sync  
 - $100/month cloud budget plan  
 
-This document is your full onboarding guide for the **3D Pose Factory** project.
+This document is your full onboarding guide for the **3d-pose-factory** project.
