@@ -506,3 +506,13 @@ Things to try or investigate:
 ---
 
 *This is a living document. Update it when you learn something new about local models.*
+
+## Related Documentation
+
+- [Local Model Learnings](Documents/reference/LOCAL_MODEL_LEARNINGS.md) - local AI
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [AI Model Cost Comparison](Documents/reference/MODEL_COST_COMPARISON.md) - AI models
+- [AI Team Orchestration](patterns/ai-team-orchestration.md) - orchestration
+- [Safety Systems](patterns/safety-systems.md) - security
+- [project-tracker/README](../../../ai-model-scratch-build/README.md) - Project Tracker

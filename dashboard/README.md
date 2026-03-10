@@ -140,3 +140,7 @@ gunicorn -w 4 -b 0.0.0.0:5000 app:app
 
 **Built with ❤️ by a UX designer who believes terminals should have feelings too.**
 
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management

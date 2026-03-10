@@ -47,7 +47,7 @@ wget -q https://github.com/Upliner/CharMorph/archive/refs/heads/master.zip -O ch
 echo "  Installing to Blender..."
 unzip -q charmorph.zip
 mv CharMorph-master ~/.config/blender/4.2/scripts/addons/CharMorph
-rm charmorph.zip
+trash charmorph.zip
 
 # Verify installation
 if [ -d ~/.config/blender/4.2/scripts/addons/CharMorph ]; then

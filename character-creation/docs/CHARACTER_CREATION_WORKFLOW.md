@@ -70,3 +70,6 @@ Mixamo characters are great for testing, but limited in variety:
 
 **Status:** Waiting for tool selection decision
 
+## Related Documentation
+
+- [README](README) - 3D Pose Factory

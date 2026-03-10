@@ -286,3 +286,7 @@ shared/
 
 **Enjoy never copy-pasting terminal commands again!** 🎉
 
+## Related Documentation
+
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [AI Team Orchestration](patterns/ai-team-orchestration.md) - orchestration

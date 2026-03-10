@@ -179,3 +179,8 @@ scene.air_props.autosave_image_path = "/workspace/output/"
 
 🏭 **Pose Factory Render Agent** - Making AI character generation easy since 2024.
 
+## Related Documentation
+
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [README](README) - 3D Pose Factory

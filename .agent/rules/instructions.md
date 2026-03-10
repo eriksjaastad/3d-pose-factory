@@ -1,4 +1,8 @@
-# CLAUDE.md - 3d-pose-factory
+---
+trigger: always_on
+---
+
+# Antigravity Rules for 3d-pose-factory
 
 <!-- AGENTSYNC:START - Do not edit between markers -->
 <!-- To modify synced rules: Edit .agentsync/rules/*.md, then run: -->

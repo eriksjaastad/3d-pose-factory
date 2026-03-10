@@ -33,8 +33,8 @@ rclone copy ./output/poses/ r2_pose_factory:pose-factory/output/processed-"$(dat
 
 # Step 4: Clean up processed files
 echo "[4/5] Cleaning up..."
-rm -f input/*.{jpg,jpeg,png} 2>/dev/null || true
-rm -f output/frames/*.{jpg,jpeg,png} 2>/dev/null || true
+trash -f input/*.{jpg,jpeg,png} 2>/dev/null || true
+trash -f output/frames/*.{jpg,jpeg,png} 2>/dev/null || true
 
 # Step 5: Shutdown (optional - comment out if you want to keep pod running)
 echo "[5/5] Processing complete! Results uploaded to R2."

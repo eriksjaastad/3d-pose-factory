@@ -281,3 +281,9 @@ You now have a complete, ready-to-run guide for setting up:
 - $100/month cloud budget plan  
 
 This document is your full onboarding guide for the **3d-pose-factory** project.
+
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [README](README) - 3D Pose Factory

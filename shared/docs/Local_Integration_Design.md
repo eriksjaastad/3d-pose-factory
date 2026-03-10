@@ -142,4 +142,7 @@ When you’re ready, we’ll:
 - Configure `rclone` locally.  
 - Connect the sync scripts to your live bucket and test the full “cloud → R2 → local → ComfyUI” loop.
 
+## Related Documentation
 
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [README](README) - 3D Pose Factory

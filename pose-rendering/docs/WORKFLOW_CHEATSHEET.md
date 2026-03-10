@@ -228,7 +228,7 @@ ls -lh data/working/
 
 ```bash
 # Clear output directory (keep scripts and characters)
-rm -rf /workspace/pose-factory/output/*
+trash -rf /workspace/pose-factory/output/*
 
 # Exit and terminate pod via web UI
 exit
@@ -242,7 +242,7 @@ cd ~/projects/3D\ Pose\ Factory/
 mv data/working data/archive/$(date +%Y%m%d_%H%M%S)
 
 # Clean downloads if needed
-# rm downloads/*.fbx  # Only if you want to free space
+# trash downloads/*.fbx  # Only if you want to free space
 ```
 
 ---
@@ -506,3 +506,10 @@ rclone copy r2_pose_factory:pose-factory/output/ data/working/ --progress
 **Time:** ~15 minutes per batch of 6 characters (8 angles each)  
 **No local Blender needed!** Everything runs on RunPod.
 
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [README](README) - 3D Pose Factory

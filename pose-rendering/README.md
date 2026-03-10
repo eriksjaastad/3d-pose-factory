@@ -180,3 +180,8 @@ Want to use custom characters instead of Mixamo?
 
 **Status:** ✅ Production ready, actively generating training data
 
+## Related Documentation
+
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [README](README) - 3D Pose Factory

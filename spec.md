@@ -1982,3 +1982,13 @@ The cost calculator has a sophisticated multi-provider pricing system with:
 **END OF SPEC VALIDATION & FINAL VERDICT**
 
 *This project is functional but carries significant technical debt. It was clearly developed in "move fast" mode with the intention of refactoring later. That time has come.*
+
+## Related Documentation
+
+- [CODE_QUALITY_STANDARDS](../project-scaffolding/Documents/CODE_QUALITY_STANDARDS.md) - code standards
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [AI Model Cost Comparison](Documents/reference/MODEL_COST_COMPARISON.md) - AI models
+- [AI Team Orchestration](patterns/ai-team-orchestration.md) - orchestration
+- [Safety Systems](patterns/safety-systems.md) - security
+- [README](README) - 3D Pose Factory

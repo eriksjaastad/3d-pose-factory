@@ -293,3 +293,10 @@ Plan for pod restarts. Everything outside `/workspace` is ephemeral.
 
 **Remember:** This pipeline is called the **Pose Factory Render Agent**. It's not a hack. It's a named system. Treat it with respect. 🏭✨
 
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [AI Model Cost Comparison](Documents/reference/MODEL_COST_COMPARISON.md) - AI models
+- [README](README) - 3D Pose Factory

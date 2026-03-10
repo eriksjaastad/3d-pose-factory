@@ -385,3 +385,13 @@ If no → New learning discovered. Document and reinforce.
 ---
 
 *This pattern provides guidance, not prescription. Adapt it to your project's needs. The goal is closing the gap between "we learned something" and "we apply what we learned."*
+
+## Related Documentation
+
+- [Local Model Learnings](Documents/reference/LOCAL_MODEL_LEARNINGS.md) - local AI
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [AI Model Cost Comparison](Documents/reference/MODEL_COST_COMPARISON.md) - AI models
+- [Safety Systems](patterns/safety-systems.md) - security
+- [Project Scaffolding](../project-scaffolding/README.md) - Project Scaffolding

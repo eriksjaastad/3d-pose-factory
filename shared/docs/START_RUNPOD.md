@@ -176,3 +176,9 @@ cd /workspace/pose-factory && git pull
 
 **That's why we run setup_pod.sh each time!**
 
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [README](README) - 3D Pose Factory

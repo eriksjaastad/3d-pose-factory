@@ -490,3 +490,6 @@ This system demonstrates:
 **Quick usage?** See `CAMERA_QUICK_START.md` for code templates.  
 **Testing?** Run `blender --background --python scripts/test_camera_framing.py`
 
+## Related Documentation
+
+- [README](README) - 3D Pose Factory

@@ -79,3 +79,6 @@ If you end up processing daily for hours at a time:
 
 For now: Fresh pods + setup script is optimal.
 
+## Related Documentation
+
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management

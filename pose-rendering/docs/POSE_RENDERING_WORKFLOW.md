@@ -290,4 +290,8 @@ ls -lh characters/*.fbx
 
 **You now have perfectly-framed, multi-angle pose renders!**
 
+## Related Documentation
 
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management
+- [Tiered AI Sprint Planning](patterns/tiered-ai-sprint-planning.md) - prompt engineering
+- [README](README) - 3D Pose Factory

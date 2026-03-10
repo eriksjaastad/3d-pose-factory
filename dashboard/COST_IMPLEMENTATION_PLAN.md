@@ -236,3 +236,7 @@ During batch processing, show:
 
 **Ready to start?** Let's begin with installing AI Render on the pod!
 
+## Related Documentation
+
+- [Doppler Secrets Management](Documents/reference/DOPPLER_SECRETS_MANAGEMENT.md) - secrets management
+- [Cost Management](Documents/reference/MODEL_COST_COMPARISON.md) - cost management

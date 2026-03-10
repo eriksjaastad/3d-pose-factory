@@ -139,3 +139,7 @@ cd /workspace && rclone copy r2_pose_factory:pose-factory/character-creation/scr
 
 **Status:** Project structure ready, awaiting tool selection
 
+## Related Documentation
+
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [README](README) - 3D Pose Factory

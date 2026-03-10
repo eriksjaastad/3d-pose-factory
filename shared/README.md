@@ -115,3 +115,6 @@ Both workflows use these shared resources:
 
 **Last Updated:** 2025-11-22
 
+## Related Documentation
+
+- [README](README) - 3D Pose Factory

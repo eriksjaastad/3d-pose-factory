@@ -454,3 +454,6 @@ Mission Control is built to expand:
 
 **Questions or issues?** Check the main [README](../../README.md) or [RESOURCES](../../docs/RESOURCES.md).
 
+## Related Documentation
+
+- [AI Team Orchestration](patterns/ai-team-orchestration.md) - orchestration

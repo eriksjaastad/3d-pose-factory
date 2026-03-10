@@ -1,3 +1,29 @@
+
+<!-- SCAFFOLD:START - Do not edit between markers -->
+# 3d-pose-factory
+
+Brief description of the project's purpose
+
+## Quick Start
+
+```bash
+# Setup
+pip install -r requirements.txt
+
+# Run
+python main.py
+```
+
+## Documentation
+
+See the `Documents/` directory for detailed documentation.
+
+## Status
+
+- **Current Phase:** Foundation
+- **Status:** #status/active
+
+<!-- SCAFFOLD:END - Custom content below is preserved -->
 # Pose Factory Render Agent 🏭
 
 **AI-Powered 3D Character Pipeline for Pose Detection Training Data**
@@ -169,132 +195,91 @@ Browser opens automatically to http://localhost:5001
 
 ### 🚧 Workflow 2: Character Creation
 - **AI-driven** - Describe character, Blender generates it
-- **Parametric** - Control body type, age, gender, appearance
-- **Unlimited variety** - Beyond Mixamo's limited library
-- **In development** - Templates ready, tool selection in progress
+- **Parame... [truncated]
 
 ---
+tags:
+  - map/project
+  - p/3d-pose-factory
+  - type/ai-pipeline
+  - domain/computer-vision
+  - status/active
+  - tech/python
+  - tech/python/blender
+  - infra/runpod
+  - infra/r2
+created: 2025-12-31
 
-## 💻 System Requirements
+# 3d-pose-factory
 
-**On Your Mac:**
-- rclone (cloud storage sync)
-- SSH (RunPod connection)
-- **No Blender needed!**
+AI-powered 3D character pipeline for pose detection training data generation using Blender automation on RunPod GPUs. This production system renders Mixamo characters from 8 angles in 2-3 minutes (48 images per batch), featuring Mission Control orchestration, smart camera framing, and MediaPipe training data output. The system includes both a web dashboard (Flask) and CLI for job submission, with SSH agent automation and Cloudflare R2 storage integration.
 
-**On RunPod:**
-- GPU: A40 or better
-- Software: Auto-installed (Blender, Python, MediaPipe)
+## Key Components
 
----
+### Pose Rendering (Production)
+- `pose-rendering/` - Main pipeline (33 files, 17 Python)
+  - Render automation scripts
+  - Smart camera framing (mathematical)
+  - 8-angle capture system
+  - MediaPipe data generation
+  - Documentation (8 MD files)
 
-## 📚 Documentation
+### Character Creation (R&D)
+- `character-creation/` - Experimental (16 files, 11 Python)
+  - AI character generation
+  - Blender templates
+  - Character pipeline scripts
 
-### Start Here:
-- **[dashboard/README.md](dashboard/)** 🎨 NEW! - Web dashboard (the best way)
-- **[shared/docs/MISSION_CONTROL.md](shared/docs/MISSION_CONTROL.md)** 🚀 - One-command workflow orchestrator (CLI)
-- **[pose-rendering/README.md](pose-rendering/)** ⭐ - For rendering Mixamo characters
-- **[character-creation/README.md](character-creation/)** 🚧 - For creating custom characters
-- **[shared/docs/RUNPOD_CONFIG.md](shared/docs/)** - RunPod & R2 setup
-- **[docs/RESOURCES.md](docs/RESOURCES.md)** - Blender API, tools, links
+### Mission Control
+- `dashboard/` - Web UI (8 files)
+  - Flask backend (`app.py`)
+  - Job submission interface
+  - Real-time progress tracking
+  - One-click result downloads
+  - Dark mode UI
 
-### Roadmaps & TODOs:
-- **[TODO.md](TODO.md)** - Main project roadmap (infrastructure, cross-cutting features)
-- **[dashboard/TODO.md](dashboard/TODO.md)** - Dashboard feature roadmap
-- **[pose-rendering/TODO.md](pose-rendering/TODO.md)** - Pose rendering improvements
-- **[character-creation/TODO.md](character-creation/TODO.md)** - Character creation progress
+### Shared Infrastructure
+- `shared/` - Common utilities (25 files)
+  - `scripts/mission_control.py` - CLI orchestrator
+  - RunPod setup scripts
+  - R2 integration
+  - SSH automation
 
-**Each workflow has complete, independent documentation and its own TODO list.**
-
----
-
-## 🎯 What This Project Does
-
-### Workflow 1: Pose Rendering (Production)
-**Input:** Mixamo animated characters (free download)  
-**Process:** Auto-import → Smart camera framing → 8-angle render  
-**Output:** 512×512 PNG images, perfect for MediaPipe training  
-**Use Case:** Generate thousands of labeled poses at scale
-
-### Workflow 2: Character Creation (Experimental)
-**Input:** Text description ("athletic woman, age 25")  
-**Process:** AI interprets → Blender generates → Export FBX  
-**Output:** Custom 3D character ready for animation  
-**Use Case:** Create diverse, unique characters beyond Mixamo
-
-**These workflows integrate:** Create custom character → Animate with Mixamo → Render with Workflow 1
-
----
-
-## 📊 Performance
-
-| Metric | Value |
-|--------|-------|
-| **Pose Rendering** | |
-| Single character (8 angles) | ~2-3 seconds |
-| Batch (6 chars × 8 angles = 48 images) | ~2-3 minutes |
-| Full workflow (upload → render → download) | ~10-15 minutes |
-| Cost per batch (RunPod A40) | ~$0.50-1.00 |
-| **Character Creation** | |
-| Status | 🚧 Coming soon |
-
----
-
-## 🔗 Useful Links
-
-- **Mixamo** (free rigged characters): https://www.mixamo.com/
-- **RunPod** (GPU compute): https://www.runpod.io/
-- **Cloudflare R2** (storage): https://dash.cloudflare.com/
-- **Blender** (3D software): https://www.blender.org/
-- **MediaPipe** (pose detection): https://google.github.io/mediapipe/
-
----
-
-## 🎉 Ready to Start?
-
-### Pose Rendering (5 Steps):
-1. Read [pose-rendering/README.md](pose-rendering/)
-2. Set up RunPod + R2 (see [shared/docs/RUNPOD_CONFIG.md](shared/docs/))
-3. Download 2-3 Mixamo characters
-4. Run `cd pose-rendering && ./scripts/render_pipeline.sh --batch`
-5. Get 48 perfect renders in minutes!
-
-### Character Creation:
-🚧 **Coming soon** - Templates ready, researching best tool (Charmorph vs procedural)
-
----
-
-**Status:**  
-✅ Pose Rendering - Production-ready, generating training data  
-🚧 Character Creation - Structure ready, tool selection in progress
-
-**Built with:** Production-grade pipeline engineering + mathematical camera framing + cloud automation
-
-
-<!-- project-scaffolding template appended -->
-
-# [PROJECT_NAME]
-
-[Brief 2-3 sentence description of the project.]
-
-## Quick Start
-
-### Installation
-```bash
-# [Add installation steps here]
-```
-
-### Usage
-```bash
-# [Add usage steps here]
-```
-
-## Documentation
-See the `Documents/` directory for detailed documentation:
-- [Architecture Overview](Documents/ARCHITECTURE_OVERVIEW.md)
-- [Operations Guide](Documents/OPERATIONS_GUIDE.md)
+### Configuration
+- `config/` - System configuration (1 YAML)
+  - RunPod credentials
+  - R2 bucket settings
+  - GPU preferences
 
 ## Status
-- **Current Phase:** [Phase Name]
-- **Status:** #status/active
 
+**Tags:** #map/project #p/3d-pose-factory  
+**Status:** #status/active #status/production (Pose Rendering)  
+**Last Major Update:** November 2025 (Mission Control complete)  
+**Infrastructure:** #infra/runpod #infra/r2
+
+
+scaffolding_version: 1.0.0
+scaffolding_date: 2026-01-14
+
+## Related Documentation
+
+- [Automation Reliability](patterns/automation-reliability.md) - automation
+- [AI Team Orchestration](patterns/ai-team-orchestration.md) - orchestration
+- [README](README) - 3D Pose Factory
+- [AGENTS.md](AGENTS.md)
+- [BLENDER_AI_FULL_DREAM_PIPELINE.md](BLENDER_AI_FULL_DREAM_PIPELINE.md)
+- [CLAUDE.md](CLAUDE.md)
+- [Documents/README.md](../ai-model-scratch-build/README.md)
+- [Documents/REVIEWS_AND_GOVERNANCE_PROTOCOL.md](../project-scaffolding/REVIEWS_AND_GOVERNANCE_PROTOCOL.md)
+- [Documents/patterns/code-review-standard.md](../writing/Documents/patterns/code-review-standard.md)
+- [Documents/patterns/learning-loop-pattern.md](../writing/Documents/patterns/learning-loop-pattern.md)
+- [Documents/reference/LOCAL_MODEL_LEARNINGS.md](../writing/Documents/reference/LOCAL_MODEL_LEARNINGS.md)
+- [PIPELINE_OVERVIEW.md](PIPELINE_OVERVIEW.md)
+- [QUICKSTART.md](QUICKSTART.md)
+- [README.md](README.md)
+- [REDEMPTION_CERTIFICATE.md](REDEMPTION_CERTIFICATE.md)
+- [TODO.md](TODO.md)
+- [character-creation/README.md](../ai-model-scratch-build/README.md)
+- [character-creation/TODO.md](../TODO.md)
+- [character-creation/docs/CHARACTER_CREATION_WORKFLOW.md](character-creation/docs/CHARACTER_CREATION_WORKFLOW.md)
