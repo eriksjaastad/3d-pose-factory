@@ -16,7 +16,7 @@ python main.py
 
 ## Documentation
 
-See the `Documents/` directory for detailed documentation.
+See the `.agent/rules/` directory for detailed documentation.
 
 ## Status
 
@@ -270,11 +270,11 @@ scaffolding_date: 2026-01-14
 - [AGENTS.md](AGENTS.md)
 - [BLENDER_AI_FULL_DREAM_PIPELINE.md](BLENDER_AI_FULL_DREAM_PIPELINE.md)
 - [CLAUDE.md](CLAUDE.md)
-- [Documents/README.md](../ai-model-scratch-build/README.md)
-- [Documents/REVIEWS_AND_GOVERNANCE_PROTOCOL.md](../project-scaffolding/REVIEWS_AND_GOVERNANCE_PROTOCOL.md)
-- [Documents/patterns/code-review-standard.md](../writing/Documents/patterns/code-review-standard.md)
-- [Documents/patterns/learning-loop-pattern.md](../writing/Documents/patterns/learning-loop-pattern.md)
-- [Documents/reference/LOCAL_MODEL_LEARNINGS.md](../writing/Documents/reference/LOCAL_MODEL_LEARNINGS.md)
+- [.agent/rules/README.md](../ai-model-scratch-build/README.md)
+- [.agent/rules/governance.md](../project-scaffolding/REVIEWS_AND_GOVERNANCE_PROTOCOL.md)
+- [.agent/rules/code-review-standard.md](../writing/.agent/rules/code-review-standard.md)
+- [.agent/rules/learning-loop-pattern.md](../writing/.agent/rules/learning-loop-pattern.md)
+- [.agent/rules/local-model-learnings.md](../writing/.agent/rules/local-model-learnings.md)
 - [PIPELINE_OVERVIEW.md](PIPELINE_OVERVIEW.md)
 - [QUICKSTART.md](QUICKSTART.md)
 - [README.md](README.md)
