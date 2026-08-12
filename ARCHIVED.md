@@ -15,9 +15,15 @@ the 2026-05-13 archive commit) were reviewed and committed. Nothing here is reco
 repo alone, so read this before assuming a file went missing by accident.
 
 **Removed — regenerable:**
-- `pose-rendering/downloads/*.fbx` (6 Mixamo rigs, ~14 MB). Safe: `shared/scripts/pod_agent.sh`
-  re-fetches them from R2 with `rclone` whenever the directory is empty. Now gitignored so a
-  re-download does not get re-committed.
+- `pose-rendering/downloads/*.fbx` (6 Mixamo rigs, ~14 MB). Now gitignored so a re-download does
+  not get re-committed.
+
+  Safe for the **pod** pipeline: `shared/scripts/pod_agent.sh` re-fetches `*.fbx` from R2 with
+  `rclone` whenever `$WORKSPACE/downloads/` is empty, so rendering still works untouched.
+
+  **The Mac-local folder does not self-heal.** If you are resurrecting this locally, restore it
+  yourself — `rclone copy` from the R2 `downloads/` prefix, or re-download from Mixamo. See
+  `pose-rendering/README.md` and `WORKFLOW_CHEATSHEET.md`, which already document that step.
 
 **Removed — retired scaffolding, referenced only by docs:**
 - `.agent/instructions.md`, `.agent/rules/code-review-standard.md`,
