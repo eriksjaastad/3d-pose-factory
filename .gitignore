@@ -33,3 +33,8 @@ pose-rendering/scripts/.pod_id
 repomix-output.xml
 .env
 .env.doppler-backup
+
+# Blender/Mixamo rig downloads — re-fetched from R2 by shared/scripts/pod_agent.sh
+# when the directory is empty. Never commit them (they were tracked until 2026-08-12).
+pose-rendering/downloads/
+**/downloads/*.fbx
