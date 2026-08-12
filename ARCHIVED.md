@@ -22,8 +22,15 @@ repo alone, so read this before assuming a file went missing by accident.
   `rclone` whenever `$WORKSPACE/downloads/` is empty, so rendering still works untouched.
 
   **The Mac-local folder does not self-heal.** If you are resurrecting this locally, restore it
-  yourself — `rclone copy` from the R2 `downloads/` prefix, or re-download from Mixamo. See
-  `pose-rendering/README.md` and `WORKFLOW_CHEATSHEET.md`, which already document that step.
+  yourself. Re-downloading from Mixamo is the documented path — see
+  `pose-rendering/docs/WORKFLOW_CHEATSHEET.md` Step 1 and its troubleshooting section.
+
+  ⚠️ **Pre-existing prefix mismatch, found during this cleanup, not introduced by it.**
+  `pod_agent.sh` reads FBX files from R2 at `pose-factory/downloads/`, but every documented
+  rclone command in `pose-rendering/README.md` and `WORKFLOW_CHEATSHEET.md` uploads to
+  `pose-factory/characters/`. No doc describes pulling from `downloads/`. So "just rclone it back"
+  is not actually written down anywhere, and if you follow the docs you will populate the wrong
+  prefix. Reconcile the two before trusting either.
 
 **Removed — retired scaffolding, referenced only by docs:**
 - `.agent/instructions.md`, `.agent/rules/code-review-standard.md`,
